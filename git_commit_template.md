@@ -11,6 +11,8 @@
 
         - [cpp lexi] 描述对于词法分析部分的修改
 
+        - [cpp toke] 描述对`token`相关的修改
+
     - [cpp test] 描述建立新的测试用例
 
 - [makefile] 描述对`CMakeLists.txt`的修改
