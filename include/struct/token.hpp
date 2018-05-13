@@ -17,23 +17,66 @@ public:
     virtual const ::std::string getType() const {
         return this->this_type;
     }
+    /**
+     * @brief 判断一个类型是不是一个错误
+     *
+     * @return true 这个类型是一个错误
+     * @return false 这个类型不是一个错误
+     */
     bool isError()const {
         return this->is_error;
     }
-
+    /**
+     * @brief 复制操作符
+     *
+     * @param b 被复制对象
+     * @return token_type&
+     */
+    token_type &operator=(const token_type &b) {
+        this->this_type = b.this_type;
+        this->setIfError(b.isError());
+        return *this;
+    }
+    /**
+     * @brief 比较二者是否相等
+     *
+     * @param b 被比较对象
+     * @return true 两者相等
+     * @return false 两者不相等
+     */
     bool operator==(const token_type &b)const {
         return this->getType() == b.getType();
     }
-    token_type(const token_type &other) : this_type(other.this_type) {}
+    /**
+     * @brief 复制构造函数
+     *
+     * @param other 被复制对象
+     */
+    token_type(const token_type &other) {
+        *this = other;
+    }
 
 protected:
+    /**
+     * @brief 设置这个类型是不是一个错误
+     *
+     * @param ifIsError
+     */
     void    setIfError(bool ifIsError) {
         this->is_error = ifIsError;
     }
-    token_type(const ::std::string type): this_type(type) {}
+    /**
+     * @brief 提供参数的构造函数
+     * 
+     * @param type 类型名称
+     * @param iserror 是否是一个错误
+     */
+    token_type(const ::std::string type, bool iserror = false): this_type(type) {
+        this->setIfError(iserror);
+    }
 private:
     bool is_error;
-    const ::std::string this_type;
+    ::std::string this_type;
 };
 /**
  * @brief 词法分析的结果
