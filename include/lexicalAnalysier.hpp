@@ -9,6 +9,13 @@
 
 namespace theNext {
 
+class lexicalAnalysierFailExctption: public ::std::exception {
+public:
+    int line;
+    int clow;
+    ::std::string errorMessage;
+};
+
 /**
  * @brief 建立简单的词法分析器
  *
@@ -65,9 +72,28 @@ public:
     ::std::vector<token> analysis(::std::string context) {
         ::std::vector<token> ans;
         TYPE now_state;
+        text_t buffer = "";
+        int line = 0 , colw = 0;
         for(auto it = context.begin(); it != context.end(); ++it) {
+            ++colw;
+            if(*it == '\n') {
+                ++line;
+                colw = 0;
+            }
             if(this->query_state(now_state, *it) != this->state_change_map.end()) {
-                now_state = *query_state(now_state,*it);
+                now_state = *query_state(now_state, *it);
+                buffer += *it;
+            } else if(this->query_type(now_state) != this->end_state.end()) {
+                token n;
+                n.content = buffer;
+                n.type = this->query_type(now_state);
+                ans.push_back(n);
+                buffer = *it;
+            } else {
+                lexicalAnalysierFailExctption error;
+                error.line = line;
+                error.clow = colw;
+                error.errorMessage = "unKnow statement when meet : " + buffer + *it;
             }
         }
         return ans;
@@ -75,6 +101,9 @@ public:
 protected:
     auto query_state(TYPE type, char a) {
         return this->state_change_map.find(::std::make_pair(type, a));
+    }
+    auto query_type(TYPE type) {
+        return this->end_state.find(type);
     }
 private:
     // 状态转换函数列表
