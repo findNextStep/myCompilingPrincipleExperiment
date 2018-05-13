@@ -17,21 +17,30 @@ public:
     virtual const ::std::string getType() const {
         return this->this_type;
     }
-    bool operator==(token_type b) {
-        return this->getType() == b.getType();
+    bool isError()const {
+        return this->is_error;
     }
 
+    bool operator==(const token_type &b)const {
+        return this->getType() == b.getType();
+    }
+    token_type(const token_type &other) : this_type(other.this_type) {}
+
 protected:
+    void    setIfError(bool ifIsError) {
+        this->is_error = ifIsError;
+    }
     token_type(const ::std::string type): this_type(type) {}
 private:
+    bool is_error;
     const ::std::string this_type;
 };
 /**
  * @brief 词法分析的结果
  * 保存了词法分析得到的类型和token所表示的内容
  */
+template<class TYPE>
 struct token {
-    typedef token_type *type_t;
     /**
      * @brief 分析的内容
      *
@@ -40,6 +49,6 @@ struct token {
     /**
      * @brief 词法分析的结果
      */
-    type_t type;
+    TYPE type;
 };
 } // namespace theNext
