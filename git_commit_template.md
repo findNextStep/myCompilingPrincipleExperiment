@@ -22,3 +22,7 @@
     - [git init] 描述开始一个新的项目
 
 - [ vscode ] 描述vscode配置变化
+
+- [mod ****] 描述submod的配置
+
+    - [mod json] 描述json模组的配置
