@@ -62,7 +62,7 @@ public:
         *this = other;
     }
 
-protected:
+public:
     /**
      * @brief 设置这个类型是不是一个错误
      *
