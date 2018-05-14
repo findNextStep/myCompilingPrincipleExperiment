@@ -1,6 +1,6 @@
 #pragma once
 #include <string>       // ::std::string
-#include <memory>
+#include "nlohmann/json.hpp"
 
 namespace theNext {
 /**
@@ -68,7 +68,7 @@ protected:
      *
      * @param ifIsError
      */
-    void    setIfError(bool ifIsError) {
+    void setIfError(bool ifIsError) {
         this->is_error = ifIsError;
     }
     /**
@@ -77,18 +77,18 @@ protected:
      * @param type 类型名称
      * @param iserror 是否是一个错误
      */
-    token_type(const ::std::string type, bool iserror = false): this_type(type) {
+    token_type(const ::std::string type = "start", bool iserror = false): this_type(type) {
         this->setIfError(iserror);
     }
 private:
     bool is_error;
     ::std::string this_type;
+    friend class token;
 };
 /**
  * @brief 词法分析的结果
  * 保存了词法分析得到的类型和token所表示的内容
  */
-template<class TYPE>
 struct token {
     /**
      * @brief 分析的内容
@@ -98,6 +98,19 @@ struct token {
     /**
      * @brief 词法分析的结果
      */
-    TYPE type;
+    token_type type;
+    auto toJson() {
+        ::nlohmann::json ans;
+        ans["type"] = this->type.getType();
+        ans["content"] = this->content;
+        return ans;
+    }
+    auto static fromJson(::nlohmann::json json) {
+        token ans;
+        ans.content = json["content"];
+        ::std::string type = json["type"];
+        ans.type = token_type(type);
+        return ans;
+    }
 };
 } // namespace theNext
