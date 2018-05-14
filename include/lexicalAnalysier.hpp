@@ -21,12 +21,12 @@ public:
  *
  * @tparam TYPE 继承于::theNext::token_type，默认构造函数为初始状态,设置友元类
  */
-template<class TYPE>
+template<typename TYPE>
 class lexicalAnalysier {
 public:
     // 类型定义
     typedef ::theNext::token_type type_t;
-    typedef ::theNext::token<TYPE> token;
+    typedef ::theNext::token token;
     // 分析内容定义
     typedef ::std::string text_t;
     // 状态转换函数定义
