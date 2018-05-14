@@ -4,9 +4,12 @@
             "name": "Linux",
             "browse": {
                 "path": [
-                    "${workspaceFolder}"
+                    "${workspaceFolder}/third/json/include",
+                    "${workspaceFolder}/include",
+                    "/usr/include",
+                    "/usr/include/c++/5/tr1"
                 ],
-                "limitSymbolsToIncludedHeaders": true
+                "limitSymbolsToIncludedHeaders": false
             },
             "includePath": [
                 "${workspaceFolder}/third/json/include",
