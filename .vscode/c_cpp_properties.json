@@ -4,18 +4,15 @@
             "name": "Linux",
             "browse": {
                 "path": [
-                    "${workspaceFolder}/third/json/include",
-                    "${workspaceFolder}/include",
-                    "/usr/include",
-                    "/usr/include/c++/5/tr1"
+                    "${workspaceFolder}"
                 ],
-                "limitSymbolsToIncludedHeaders": false
+                "limitSymbolsToIncludedHeaders": true
             },
             "includePath": [
+                "${workspaceFolder}",
                 "${workspaceFolder}/third/json/include",
                 "${workspaceFolder}/include",
-                "/usr/include",
-                "/usr/include/c++/5/tr1"
+                "/usr/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
