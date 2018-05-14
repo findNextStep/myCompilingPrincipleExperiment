@@ -47,6 +47,12 @@ public:
     bool operator==(const token_type &b)const {
         return this->getType() == b.getType();
     }
+    bool operator < (const token_type &b)const {
+        return this->getType() < b.getType();
+    }
+    bool operator > (const token_type &b)const {
+        return this->getType() > b.getType();
+    }
     /**
      * @brief 复制构造函数
      *
@@ -67,7 +73,7 @@ protected:
     }
     /**
      * @brief 提供参数的构造函数
-     * 
+     *
      * @param type 类型名称
      * @param iserror 是否是一个错误
      */

@@ -1,7 +1,11 @@
 #include <iostream>
 #include "lexicalAnalysier.hpp"
+#include "threadLanguage/threadSetting.hpp"
+
+using ::theNext::threadSetting::threadState;
 
 int main(int, char **) {
-    // ::theNext::lexicalAnalysier<::theNext::token_type> a;
-    std::cout << "Hello, world!\n";
+    ::theNext::lexicalAnalysier<threadState> a;
+    a.addStateChangeWay(threadState(), '+', threadState::addOp);
+    return 0;
 }
