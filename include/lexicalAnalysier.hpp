@@ -89,7 +89,7 @@ public:
      *
      * @param context 分析的文章
      */
-    ::std::vector<token> analysis(::std::string context) {
+    ::std::vector<token> analysis(::std::string context) const{
         ::std::vector<token> ans;
         token_type now_state;
         text_t buffer = "";
@@ -109,7 +109,8 @@ public:
                 n.type = this->query_type(now_state)->second;
                 ans.push_back(n);
                 now_state = token_type();
-                buffer = *it;
+                buffer = "";
+                it--;
             } else {
                 lexicalAnalysierFailExctption error;
                 error.line = line;
@@ -132,7 +133,7 @@ protected:
      * @param type 查询的节点
      * @return vector<pair<char,token_type> > 出度表
      */
-    auto whereIgo(token_type type) {
+    auto whereIgo(token_type type)const {
         ::std::vector<std::pair<char, token_type> >ans;
         for(auto item : state_change_map) {
             if(item.first.first == type) {
@@ -141,10 +142,10 @@ protected:
         }
         return ans;
     }
-    auto query_state(token_type type, char a) {
+    auto query_state(token_type type, char a)const {
         return this->state_change_map.find(::std::make_pair(type, a));
     }
-    auto query_type(token_type type) {
+    auto query_type(token_type type)const {
         return this->end_state.find(type);
     }
 public:
