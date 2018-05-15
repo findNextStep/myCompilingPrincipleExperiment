@@ -76,7 +76,7 @@ auto getlex() {
     ans.addStateChangeWay(threadState(), '\t', threadState());
     ans.addStateChangeWay(threadState(), '\n', threadState());
 
-    for(char a = 'a'; a < 'z'; ++a) {
+    for(char a = 'a'; a <= 'z'; ++a) {
         ans.addStateChangeWay(threadState(), a, threadState::identifier);
         ans.addStateChangeWay(threadState(), a + 'A' - 'a', threadState::identifier);
         ans.addStateChangeWay(threadState::identifier, a, threadState::identifier);
@@ -107,7 +107,29 @@ auto getlex() {
     ans.defineKeyWords("->", threadState::operators);
     ans.defineKeyWords("{", threadState::operators);
     ans.defineKeyWords("}", threadState::operators);
+    ans.defineKeyWords(":", threadState::operators);
+    ans.defineKeyWords("::", threadState::operators);
+    ans.defineKeyWords(";", threadState::operators);
+    ans.defineKeyWords("=>", threadState::operators);
+
+    ans.defineKeyWords("thread", threadState::keyWords);
+    ans.defineKeyWords("features", threadState::keyWords);
+    ans.defineKeyWords("flows", threadState::keyWords);
+    ans.defineKeyWords("properties", threadState::keyWords);
+    ans.defineKeyWords("end", threadState::keyWords);
+    ans.defineKeyWords("none", threadState::keyWords);
     ans.defineKeyWords("in", threadState::keyWords);
+    ans.defineKeyWords("out", threadState::keyWords);
+    ans.defineKeyWords("data", threadState::keyWords);
+    ans.defineKeyWords("port", threadState::keyWords);
+    ans.defineKeyWords("event", threadState::keyWords);
+    ans.defineKeyWords("parameter", threadState::keyWords);
+    ans.defineKeyWords("flow", threadState::keyWords);
+    ans.defineKeyWords("source", threadState::keyWords);
+    ans.defineKeyWords("sink", threadState::keyWords);
+    ans.defineKeyWords("path", threadState::keyWords);
+    ans.defineKeyWords("constant", threadState::keyWords);
+    ans.defineKeyWords("access", threadState::keyWords);
     return ans;
 }
 
