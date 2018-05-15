@@ -72,12 +72,17 @@ public:
         this->is_error = ifIsError;
     }
     /**
+     * @brief 默认构造函数，默认为开始状态
+     *
+     */
+    token_type(): token_type("start") {}
+    /**
      * @brief 提供参数的构造函数
      *
      * @param type 类型名称
      * @param iserror 是否是一个错误
      */
-    token_type(const ::std::string type = "start", bool iserror = false): this_type(type) {
+    token_type(const ::std::string type, bool iserror = false): this_type(type) {
         this->setIfError(iserror);
     }
 private:

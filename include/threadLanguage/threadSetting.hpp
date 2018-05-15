@@ -9,8 +9,7 @@ class threadState: public token_type {
     threadState(::std::string content): token_type(content) {}
 public:
 // 定义状态
-    // 默认构造函数 --> 起始状态
-    threadState(): token_type("start") {};
+    threadState(): token_type() {}
     // 标识符
     const static threadState identifier;
     // 一个+符号
@@ -91,9 +90,16 @@ auto getlex() {
         ans.addStateChangeWay(threadState::subOp, a, threadState::decimalA);
         ans.addStateChangeWay(threadState::decimalA, a, threadState::decimalA);
         ans.addStateChangeWay(threadState::decimalB, a, threadState::decimalB);
+        ans.addStateChangeWay(threadState(), a, threadState::decimalA);
     }
-
     ans.addStateChangeWay(threadState::decimalA, '.', threadState::decimalB);
+
+// 定义结束跳转
+    ans.defineEndState(threadState::decimalA, threadState::decimal);
+    ans.defineEndState(threadState::decimalB, threadState::decimal);
+    ans.defineEndState(threadState::identifier, threadState::identifier);
+    ans.defineEndState(threadState::addEqualArrow, threadState::operators);
+    ans.defineEndState(threadState::equalArrow, threadState::operators);
     return ans;
 }
 
