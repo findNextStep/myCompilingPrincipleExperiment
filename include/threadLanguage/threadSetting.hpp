@@ -84,7 +84,7 @@ auto getlex() {
     }
     ans.addStateChangeWay(threadState::identifier, '_', threadState::identifier);
 
-    for(char a = '0'; a < '9'; ++a) {
+    for(char a = '0'; a <= '9'; ++a) {
         ans.addStateChangeWay(threadState::identifier, a, threadState::identifier);
         ans.addStateChangeWay(threadState::addOp, a, threadState::decimalA);
         ans.addStateChangeWay(threadState::subOp, a, threadState::decimalA);
@@ -94,12 +94,20 @@ auto getlex() {
     }
     ans.addStateChangeWay(threadState::decimalA, '.', threadState::decimalB);
 
-// 定义结束跳转
+    ans.addStateChangeWay(threadState(), '+', threadState::addOp);
+    ans.addStateChangeWay(threadState(), '-', threadState::subOp);
+
+    // 定义结束跳转
     ans.defineEndState(threadState::decimalA, threadState::decimal);
     ans.defineEndState(threadState::decimalB, threadState::decimal);
     ans.defineEndState(threadState::identifier, threadState::identifier);
-    ans.defineEndState(threadState::addEqualArrow, threadState::operators);
-    ans.defineEndState(threadState::equalArrow, threadState::operators);
+
+    // 定义操作符和关键字
+    ans.defineKeyWords("+=>", threadState::operators);
+    ans.defineKeyWords("->", threadState::operators);
+    ans.defineKeyWords("{", threadState::operators);
+    ans.defineKeyWords("}", threadState::operators);
+    ans.defineKeyWords("in", threadState::keyWords);
     return ans;
 }
 
