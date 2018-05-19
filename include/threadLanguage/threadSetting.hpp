@@ -32,6 +32,7 @@ auto getlex() {
     ans.addStateChangeWay(start, ' ', start);
     ans.addStateChangeWay(start, '\t', start);
     ans.addStateChangeWay(start, '\n', start);
+    ans.addStateChangeWay(start, '\r', start);
 
     for(char a = 'a'; a <= 'z'; ++a) {
         ans.addStateChangeWay(start, a, identifier);
