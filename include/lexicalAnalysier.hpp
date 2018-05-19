@@ -100,6 +100,9 @@ public:
                 ++line;
                 colw = 0;
             }
+            if(now_state == ::std::string()) {
+                buffer = "";
+            }
             if(this->query_state(now_state, *it) != this->state_change_map.end()) {
                 now_state = query_state(now_state, *it)->second;
                 buffer += *it;
