@@ -132,7 +132,6 @@ public:
         }
         return ans;
     }
-protected:
     /**
      * @brief 文件预处理
      * 主要内容为将\r\n和\r更换为\n 
@@ -148,6 +147,7 @@ protected:
             }
         }
     }
+protected:
     /**
      * @brief 返回一个DFA节点的全部出度
      *
@@ -182,7 +182,7 @@ protected:
     ::std::map<::std::string, TYPE>::const_iterator query_type(::std::string type)const {
         return this->end_state.find(type);
     }
-public:
+private:
     // 状态转换函数列表
     ::std::map<std::pair<::std::string, char>, ::std::string> state_change_map;
     // 结束处理列表
