@@ -4,6 +4,7 @@
 #include <map>          // ::std::map
 #include <vector>       // ::std::vector
 #include <memory>       // ::std::shared_ptr
+#include <sstream>
 #include "struct/token.hpp"
 
 
@@ -13,7 +14,13 @@ class lexicalAnalysierFailExctption: public ::std::exception {
 public:
     int line;
     int clow;
+    ::std::string::const_iterator end;
     ::std::string errorMessage;
+    ::std::string what() {
+        std::stringstream ss;
+        ss << line << ":" << clow << "\t" << errorMessage;
+        return ss.str();
+    }
 };
 
 /**
@@ -89,8 +96,7 @@ public:
      *
      * @param context 分析的文章
      */
-    ::std::vector<token> analysis(::std::string context) const {
-        preprocessing(context);
+    ::std::vector<token> analysis(const ::std::string context) const {
         ::std::vector<token> ans;
         ::std::string now_state;
         text_t buffer = "";
@@ -119,7 +125,7 @@ public:
                 lexicalAnalysierFailExctption error;
                 error.line = line;
                 error.clow = colw;
-                std::string test = std::string(context.begin() , it);
+                error.end = it++;
                 error.errorMessage = "unKnow statement when meet : \"" + buffer + "\"\"" + *it + "\"";
                 throw error;
             }
@@ -134,7 +140,7 @@ public:
     }
     /**
      * @brief 文件预处理
-     * 主要内容为将\r\n和\r更换为\n 
+     * 主要内容为将\r\n和\r更换为\n
      * @param content 需要处理的字符串
      */
     void static preprocessing(::std::string &content) {
