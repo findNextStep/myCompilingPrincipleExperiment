@@ -90,6 +90,7 @@ public:
      * @param context 分析的文章
      */
     ::std::vector<token> analysis(::std::string context) const {
+        preprocessing(context);
         ::std::vector<token> ans;
         ::std::string now_state;
         text_t buffer = "";
@@ -118,7 +119,9 @@ public:
                 lexicalAnalysierFailExctption error;
                 error.line = line;
                 error.clow = colw;
-                error.errorMessage = "unKnow statement when meet : " + buffer + *it;
+                std::string test = std::string(context.begin() , it);
+                error.errorMessage = "unKnow statement when meet : \"" + buffer + "\"\"" + *it + "\"";
+                throw error;
             }
         }
         if(this->query_type(now_state) != this->end_state.end()) {
@@ -130,6 +133,21 @@ public:
         return ans;
     }
 protected:
+    /**
+     * @brief 文件预处理
+     * 主要内容为将\r\n和\r更换为\n 
+     * @param content 需要处理的字符串
+     */
+    void static preprocessing(::std::string &content) {
+        for(auto it = content.begin(); it != content.end(); ++it) {
+            if(*it == '\r') {
+                *it = '\n';
+                if(*(it + 1) == '\n') {
+                    *it = ' ';
+                }
+            }
+        }
+    }
     /**
      * @brief 返回一个DFA节点的全部出度
      *
@@ -145,9 +163,22 @@ protected:
         }
         return ans;
     }
+    /**
+     * @brief 查找下一个状态
+     *
+     * @param type 当前状态
+     * @param a 下一个字符
+     * @return std::map<std::pair<::std::string, char>, ::std::string>::const_iterator 下一个状态或者end()
+     */
     std::map<std::pair<::std::string, char>, ::std::string>::const_iterator query_state(::std::string type, char a)const {
         return this->state_change_map.find(::std::make_pair(type, a));
     }
+    /**
+     * @brief 查找终止状态
+     *
+     * @param type 状态
+     * @return ::std::map<::std::string, TYPE>::const_iterator 状态对应的结束类型或者end()
+     */
     ::std::map<::std::string, TYPE>::const_iterator query_type(::std::string type)const {
         return this->end_state.find(type);
     }
