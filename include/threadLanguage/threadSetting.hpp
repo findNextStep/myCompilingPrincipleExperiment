@@ -5,131 +5,88 @@
 namespace theNext {
 namespace threadSetting {
 
-class threadState: public token_type {
-    threadState(::std::string content): token_type(content) {}
-public:
-// 定义状态
-    threadState(): token_type() {}
-    // 标识符
-    const static threadState identifier;
-    // 一个+符号
-    const static threadState addOp;
-    // 一个-符号
-    const static threadState subOp;
-    // ->
-    const static threadState subArrow;
+const ::std::string identifier("identifier");
+const ::std::string start;
+const ::std::string addOp("add_op");
+const ::std::string subOp("sub_op");
+const ::std::string subArrow("subArrow");
+const ::std::string decimalA("decimalA");
+const ::std::string decimalB("decimalB");
+const ::std::string operators("operators");
 
-    // 一个没有小数点的数字
-    const static threadState decimalA;
-    // 一个有小数点的数字
-    const static threadState decimalB;
-    // 一个{
-    const static threadState leftBrace;
-    // 一个}
-    const static threadState rightBrace;
-    // 一个:
-    const static threadState colon;
-    // 两个:
-    const static threadState doubleColon;
-    // 一个=
-    const static threadState equal;
-    // 一个=>
-    const static threadState equalArrow;
-    // +=
-    const static threadState addEqual;
-    // +=>
-    const static threadState addEqualArrow;
+const ::std::string keyWords("keyWord");
+const ::std::string decimal("decimal");
 
-// 定义类型
-    // 一个操作符
-    const static threadState operators;
-    // 一个数字
-    const static threadState decimal;
-    // 一个关键字
-    const static threadState keyWords;
-};
-
-const threadState threadState::identifier("identifier");
-const threadState threadState::addOp("add_op");
-const threadState threadState::subOp("sub_op");
-const threadState threadState::subArrow("subArrow");
-const threadState threadState::decimalA("decimalA");
-const threadState threadState::decimalB("decimalB");
-const threadState threadState::operators("operators");
-
-const threadState threadState::keyWords("keyWord");
-const threadState threadState::decimal("decimal");
-
-const threadState threadState::leftBrace("leftBrace");
-const threadState threadState::rightBrace("rightBrace");
-const threadState threadState::colon("colon");
-const threadState threadState::doubleColon("doubleColon");
-const threadState threadState::equal("equal");
-const threadState threadState::equalArrow("equalArrow");
-const threadState threadState::addEqual("addEqual");
-const threadState threadState::addEqualArrow("addEqualArrow");
+const ::std::string leftBrace("leftBrace");
+const ::std::string rightBrace("rightBrace");
+const ::std::string colon("colon");
+const ::std::string doubleColon("doubleColon");
+const ::std::string equal("equal");
+const ::std::string equalArrow("equalArrow");
+const ::std::string addEqual("addEqual");
+const ::std::string addEqualArrow("addEqualArrow");
 
 auto getlex() {
-    ::theNext::lexicalAnalysier<threadState>ans;
+    ::theNext::lexicalAnalysier ans;
 
-    ans.addStateChangeWay(threadState(), ' ', threadState());
-    ans.addStateChangeWay(threadState(), '\t', threadState());
-    ans.addStateChangeWay(threadState(), '\n', threadState());
+    ans.addStateChangeWay(start, ' ', start);
+    ans.addStateChangeWay(start, '\t', start);
+    ans.addStateChangeWay(start, '\n', start);
 
     for(char a = 'a'; a <= 'z'; ++a) {
-        ans.addStateChangeWay(threadState(), a, threadState::identifier);
-        ans.addStateChangeWay(threadState(), a + 'A' - 'a', threadState::identifier);
-        ans.addStateChangeWay(threadState::identifier, a, threadState::identifier);
-        ans.addStateChangeWay(threadState::identifier, a + 'A' - 'a', threadState::identifier);
+        ans.addStateChangeWay(start, a, identifier);
+        ans.addStateChangeWay(start, a + 'A' - 'a', identifier);
+        ans.addStateChangeWay(identifier, a, identifier);
+        ans.addStateChangeWay(identifier, a + 'A' - 'a', identifier);
     }
-    ans.addStateChangeWay(threadState::identifier, '_', threadState::identifier);
+    ans.addStateChangeWay(identifier, '_', identifier);
 
     for(char a = '0'; a <= '9'; ++a) {
-        ans.addStateChangeWay(threadState::identifier, a, threadState::identifier);
-        ans.addStateChangeWay(threadState::addOp, a, threadState::decimalA);
-        ans.addStateChangeWay(threadState::subOp, a, threadState::decimalA);
-        ans.addStateChangeWay(threadState::decimalA, a, threadState::decimalA);
-        ans.addStateChangeWay(threadState::decimalB, a, threadState::decimalB);
-        ans.addStateChangeWay(threadState(), a, threadState::decimalA);
+        ans.addStateChangeWay(identifier, a, identifier);
+        ans.addStateChangeWay(addOp, a, decimalA);
+        ans.addStateChangeWay(subOp, a, decimalA);
+        ans.addStateChangeWay(decimalA, a, decimalA);
+        ans.addStateChangeWay(decimalB, a, decimalB);
+        ans.addStateChangeWay(start, a, decimalA);
     }
-    ans.addStateChangeWay(threadState::decimalA, '.', threadState::decimalB);
+    ans.addStateChangeWay(decimalA, '.', decimalB);
 
-    ans.addStateChangeWay(threadState(), '+', threadState::addOp);
-    ans.addStateChangeWay(threadState(), '-', threadState::subOp);
+    ans.addStateChangeWay(start, '+', addOp);
+    ans.addStateChangeWay(start, '-', subOp);
 
     // 定义结束跳转
-    ans.defineEndState(threadState::decimalA, threadState::decimal);
-    ans.defineEndState(threadState::decimalB, threadState::decimal);
-    ans.defineEndState(threadState::identifier, threadState::identifier);
+    ans.defineEndState(decimalA, decimal);
+    ans.defineEndState(decimalB, decimal);
+    ans.defineEndState(identifier, identifier);
 
-    // 定义操作符和关键字
-    ans.defineKeyWords("+=>", threadState::operators);
-    ans.defineKeyWords("->", threadState::operators);
-    ans.defineKeyWords("{", threadState::operators);
-    ans.defineKeyWords("}", threadState::operators);
-    ans.defineKeyWords(":", threadState::operators);
-    ans.defineKeyWords("::", threadState::operators);
-    ans.defineKeyWords(";", threadState::operators);
-    ans.defineKeyWords("=>", threadState::operators);
+    // // 定义操作符和关键字
+    ans.defineKeyWords("+=>", operators);
+    ans.defineKeyWords("->", operators);
+    ans.defineKeyWords("{", operators);
+    ans.defineKeyWords("}", operators);
+    ans.defineKeyWords(":", operators);
+    ans.defineKeyWords("::", operators);
+    ans.defineKeyWords(";", operators);
+    ans.defineKeyWords("=>", operators);
 
-    ans.defineKeyWords("thread", threadState::keyWords);
-    ans.defineKeyWords("features", threadState::keyWords);
-    ans.defineKeyWords("flows", threadState::keyWords);
-    ans.defineKeyWords("properties", threadState::keyWords);
-    ans.defineKeyWords("end", threadState::keyWords);
-    ans.defineKeyWords("none", threadState::keyWords);
-    ans.defineKeyWords("in", threadState::keyWords);
-    ans.defineKeyWords("out", threadState::keyWords);
-    ans.defineKeyWords("data", threadState::keyWords);
-    ans.defineKeyWords("port", threadState::keyWords);
-    ans.defineKeyWords("event", threadState::keyWords);
-    ans.defineKeyWords("parameter", threadState::keyWords);
-    ans.defineKeyWords("flow", threadState::keyWords);
-    ans.defineKeyWords("source", threadState::keyWords);
-    ans.defineKeyWords("sink", threadState::keyWords);
-    ans.defineKeyWords("path", threadState::keyWords);
-    ans.defineKeyWords("constant", threadState::keyWords);
-    ans.defineKeyWords("access", threadState::keyWords);
+    ans.defineKeyWords("thread", keyWords);
+    ans.defineKeyWords("features", keyWords);
+    ans.defineKeyWords("flows", keyWords);
+    ans.defineKeyWords("properties", keyWords);
+    ans.defineKeyWords("end", keyWords);
+    ans.defineKeyWords("none", keyWords);
+    ans.defineKeyWords("in", keyWords);
+    ans.defineKeyWords("out", keyWords);
+    ans.defineKeyWords("data", keyWords);
+    ans.defineKeyWords("port", keyWords);
+    ans.defineKeyWords("event", keyWords);
+    ans.defineKeyWords("parameter", keyWords);
+    ans.defineKeyWords("flow", keyWords);
+    ans.defineKeyWords("source", keyWords);
+    ans.defineKeyWords("sink", keyWords);
+    ans.defineKeyWords("path", keyWords);
+    ans.defineKeyWords("constant", keyWords);
+    ans.defineKeyWords("access", keyWords);
     return ans;
 }
 
