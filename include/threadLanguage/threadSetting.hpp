@@ -56,7 +56,6 @@ auto getlex() {
     ans.addStateChangeWay(start, '-', subOp);
 
     // 定义结束跳转
-    ans.defineEndState(decimalA, decimal);
     ans.defineEndState(decimalB, decimal);
     ans.defineEndState(identifier, identifier);
 
