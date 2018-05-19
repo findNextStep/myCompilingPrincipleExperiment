@@ -14,8 +14,10 @@ class lexicalAnalysierFailExctption: public ::std::exception {
 public:
     int line;
     int clow;
-    ::std::string::const_iterator end;
+    ::std::string::iterator end;
     ::std::string errorMessage;
+    ::std::string buffer;
+    ::std::string nowState;
     ::std::string what() {
         std::stringstream ss;
         ss << line << ":" << clow << "\t" << errorMessage;
@@ -81,7 +83,7 @@ public:
                 // 获取原本位置所用的出度
                 auto out = this->whereIgo(replace);
                 for(auto pair : out) {
-                    this->state_change_map[::std::make_pair(name, pair.first)] =  pair.second;
+                    this->state_change_map[::std::make_pair(type + " in " + word + " when " + name, pair.first)] =  pair.second;
                 }
             }
             this->state_change_map[std::make_pair(now_state, c)] = ::std::string(name);
@@ -90,18 +92,19 @@ public:
         this->end_state[::std::string(word)] = type;
         return *this;
     }
+
 public:
     /**
      * @brief 分析函数
      *
      * @param context 分析的文章
      */
-    ::std::vector<token> analysis(const ::std::string context) const {
+    ::std::vector<token> analysis(::std::string &context) const {
         ::std::vector<token> ans;
         ::std::string now_state;
         text_t buffer = "";
         int line = 0 , colw = 0;
-        for(auto it = context.begin(); it != context.end(); ++it) {
+        for(::std::string::iterator it = context.begin(); it != context.end(); ++it) {
             ++colw;
             if(*it == '\n') {
                 ++line;
@@ -125,7 +128,9 @@ public:
                 lexicalAnalysierFailExctption error;
                 error.line = line;
                 error.clow = colw;
-                error.end = it++;
+                error.end = it;
+                error.buffer = buffer;
+                error.nowState = now_state;
                 error.errorMessage = "unKnow statement when meet : \"" + buffer + "\"\"" + *it + "\"";
                 throw error;
             }
