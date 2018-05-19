@@ -19,14 +19,14 @@ public:
 /**
  * @brief 建立简单的词法分析器
  *
- * @tparam TYPE 继承于::theNext::token_type，默认构造函数为初始状态,设置友元类
+ * @tparam TYPE 继承于::theNext::::std::string，默认构造函数为初始状态,设置友元类
  */
-template<typename TYPE>
 class lexicalAnalysier {
 public:
     // 类型定义
-    typedef ::theNext::token_type type_t;
+    typedef ::std::string type_t;
     typedef ::theNext::token token;
+    typedef ::std::string TYPE;
     // 分析内容定义
     typedef ::std::string text_t;
     // 状态转换函数定义
@@ -34,7 +34,7 @@ public:
     // 结束方式
     typedef ::std::pair<TYPE, type_t> end_state_t;
     // 本体类型
-    typedef theNext::lexicalAnalysier<TYPE> this_t;
+    typedef theNext::lexicalAnalysier this_t;
 public:
     // 设置用函数
     lexicalAnalysier() {}
@@ -64,7 +64,7 @@ public:
         return *this;
     }
     this_t &defineKeyWords(std::string word, TYPE type) {
-        token_type now_state;
+        ::std::string now_state;
         std::string name;
         for(auto c : word) {
             name += c;
@@ -77,10 +77,10 @@ public:
                     this->state_change_map[::std::make_pair(name, pair.first)] =  pair.second;
                 }
             }
-            this->state_change_map[std::make_pair(now_state, c)] = token_type(name);
-            now_state = token_type(name);
+            this->state_change_map[std::make_pair(now_state, c)] = ::std::string(name);
+            now_state = ::std::string(name);
         }
-        this->end_state[token_type(word)] = type;
+        this->end_state[::std::string(word)] = type;
         return *this;
     }
 public:
@@ -89,9 +89,9 @@ public:
      *
      * @param context 分析的文章
      */
-    ::std::vector<token> analysis(::std::string context) const{
+    ::std::vector<token> analysis(::std::string context) const {
         ::std::vector<token> ans;
-        token_type now_state;
+        ::std::string now_state;
         text_t buffer = "";
         int line = 0 , colw = 0;
         for(auto it = context.begin(); it != context.end(); ++it) {
@@ -108,7 +108,7 @@ public:
                 n.content = buffer;
                 n.type = this->query_type(now_state)->second;
                 ans.push_back(n);
-                now_state = token_type();
+                now_state = ::std::string();
                 buffer = "";
                 it--;
             } else {
@@ -131,10 +131,10 @@ protected:
      * @brief 返回一个DFA节点的全部出度
      *
      * @param type 查询的节点
-     * @return vector<pair<char,token_type> > 出度表
+     * @return vector<pair<char,::std::string> > 出度表
      */
-    auto whereIgo(token_type type)const {
-        ::std::vector<std::pair<char, token_type> >ans;
+    ::std::vector<std::pair<char, ::std::string> > whereIgo(::std::string type)const {
+        ::std::vector<std::pair<char, ::std::string> >ans;
         for(auto item : state_change_map) {
             if(item.first.first == type) {
                 ans.push_back(std::make_pair(item.first.second, item.second));
@@ -142,17 +142,17 @@ protected:
         }
         return ans;
     }
-    auto query_state(token_type type, char a)const {
+    std::map<std::pair<::std::string, char>, ::std::string>::const_iterator query_state(::std::string type, char a)const {
         return this->state_change_map.find(::std::make_pair(type, a));
     }
-    auto query_type(token_type type)const {
+    ::std::map<::std::string, TYPE>::const_iterator query_type(::std::string type)const {
         return this->end_state.find(type);
     }
 public:
     // 状态转换函数列表
-    ::std::map<std::pair<token_type, char>, token_type> state_change_map;
+    ::std::map<std::pair<::std::string, char>, ::std::string> state_change_map;
     // 结束处理列表
-    ::std::map<token_type, TYPE> end_state;
+    ::std::map<::std::string, TYPE> end_state;
 };
 
 } // namespace theNext
