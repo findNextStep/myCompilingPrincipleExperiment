@@ -72,6 +72,13 @@ public:
         this->end_state[nowState] = nowState;
         return *this;
     }
+    /**
+     * @brief 添加一个关键字
+     * 
+     * @param word 关键字内容
+     * @param type 关键字类型
+     * @return this_t& 
+     */
     this_t &defineKeyWords(std::string word, TYPE type) {
         ::std::string now_state;
         std::string name;
@@ -92,7 +99,15 @@ public:
         this->end_state[::std::string(word)] = type;
         return *this;
     }
-
+    /**
+     * @brief 添加一个关键字
+     * 关键字类型就是关键字本身
+     * @param word 关键字
+     * @return this_t& 
+     */
+    this_t &defineKeyWords(std::string word) {
+        return defineKeyWords(word, word);
+    }
 public:
     /**
      * @brief 分析函数
