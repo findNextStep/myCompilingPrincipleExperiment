@@ -15,7 +15,7 @@ string readFile(string name) {
         char *buffer = new char [length];
         is.read(buffer, length);
         is.close();
-        string ans = buffer;
+        string ans = std::string(buffer, length);
         delete[] buffer;
         return ans;
     }
@@ -23,18 +23,40 @@ string readFile(string name) {
 }
 
 int main(const int argc, const char **argv) {
-    string fileName = "/media/pxq/data/cuorse/complie/task/1task/testcase/test_txt/test1.txt";
+    string fileName = "/media/pxq/data/cuorse/complie/task/1task/testcase/test_txt/test2.txt";
     if(argc == 2) {
         fileName = argv[1];
     }
     auto lex = ::theNext::threadSetting::getlex();
 
     auto content = readFile(fileName);
-    cout << content << endl;
+    ::theNext::lexicalAnalysier::preprocessing(content);
 
-    auto ans = lex.analysis(content);
+    std::vector<theNext::token> ans;
+    ::std::string::iterator now = content.begin();
+    int li = 0, cl = 0;
+    while(now != content.end() && ans.size() == 0) {
+        try {
+            ans = lex.analysis(content);
+        } catch(const ::theNext::lexicalAnalysierFailExctption &e) {
+            now = e.end;
+            li += e.line;
+            if(e.line != 0) {
+                cl = e.clow;
+            } else {
+                cl += e.clow - 1;
+            }
+            cout << li << ":" << cl << "\t" << e.buffer <<  " when " << *e.end << endl;
+            if(e.nowState == "") {
+                ++now;
+            }
+            content = std::string(now, content.end());
+            now = content.begin();
+        }
+        cout << ans.size() << endl;
+    }
     for(auto token : ans) {
-        cout << token.toJson() << endl;
+        cout << token.type << "\t" << token.content << endl;
     }
     return 0;
 }
