@@ -60,33 +60,33 @@ auto getlex() {
     ans.defineEndState(identifier, identifier);
 
     // // 定义操作符和关键字
-    ans.defineKeyWords("+=>", operators);
-    ans.defineKeyWords("->", operators);
-    ans.defineKeyWords("{", operators);
-    ans.defineKeyWords("}", operators);
-    ans.defineKeyWords(":", operators);
-    ans.defineKeyWords("::", operators);
-    ans.defineKeyWords(";", operators);
-    ans.defineKeyWords("=>", operators);
+    ans.defineKeyWords("+=>");
+    ans.defineKeyWords("->");
+    ans.defineKeyWords("{");
+    ans.defineKeyWords("}");
+    ans.defineKeyWords(":");
+    ans.defineKeyWords("::");
+    ans.defineKeyWords(";");
+    ans.defineKeyWords("=>");
 
-    ans.defineKeyWords("thread", keyWords);
-    ans.defineKeyWords("features", keyWords);
-    ans.defineKeyWords("flows", keyWords);
-    ans.defineKeyWords("properties", keyWords);
-    ans.defineKeyWords("end", keyWords);
-    ans.defineKeyWords("none", keyWords);
-    ans.defineKeyWords("in", keyWords);
-    ans.defineKeyWords("out", keyWords);
-    ans.defineKeyWords("data", keyWords);
-    ans.defineKeyWords("port", keyWords);
-    ans.defineKeyWords("event", keyWords);
-    ans.defineKeyWords("parameter", keyWords);
-    ans.defineKeyWords("flow", keyWords);
-    ans.defineKeyWords("source", keyWords);
-    ans.defineKeyWords("sink", keyWords);
-    ans.defineKeyWords("path", keyWords);
-    ans.defineKeyWords("constant", keyWords);
-    ans.defineKeyWords("access", keyWords);
+    ans.defineKeyWords("thread");
+    ans.defineKeyWords("features");
+    ans.defineKeyWords("flows");
+    ans.defineKeyWords("properties");
+    ans.defineKeyWords("end");
+    ans.defineKeyWords("none");
+    ans.defineKeyWords("in");
+    ans.defineKeyWords("out");
+    ans.defineKeyWords("data");
+    ans.defineKeyWords("port");
+    ans.defineKeyWords("event");
+    ans.defineKeyWords("parameter");
+    ans.defineKeyWords("flow");
+    ans.defineKeyWords("source");
+    ans.defineKeyWords("sink");
+    ans.defineKeyWords("path");
+    ans.defineKeyWords("constant");
+    ans.defineKeyWords("access");
     return ans;
 }
 
