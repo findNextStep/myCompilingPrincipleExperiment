@@ -27,21 +27,18 @@ public:
 
 /**
  * @brief 建立简单的词法分析器
- *
- * @tparam TYPE 继承于::theNext::::std::string，默认构造函数为初始状态,设置友元类
  */
 class lexicalAnalysier {
 public:
     // 类型定义
     typedef ::std::string type_t;
     typedef ::theNext::token token;
-    typedef ::std::string TYPE;
     // 分析内容定义
     typedef ::std::string text_t;
     // 状态转换函数定义
-    typedef ::std::pair<std::pair<TYPE, char>, TYPE> state_change_t;
+    typedef ::std::pair<std::pair<::std::string, char>, ::std::string> state_change_t;
     // 结束方式
-    typedef ::std::pair<TYPE, type_t> end_state_t;
+    typedef ::std::pair<::std::string, type_t> end_state_t;
     // 本体类型
     typedef theNext::lexicalAnalysier this_t;
 public:
@@ -56,7 +53,7 @@ public:
      * @param nextState
      * @return this_t&
      */
-    this_t &addStateChangeWay(TYPE nowState, char nowChar, TYPE nextState) {
+    this_t &addStateChangeWay(::std::string nowState, char nowChar, const ::std::string &nextState) {
         this->state_change_map[::std::make_pair(nowState, nowChar)] = nextState;
         return *this;
     }
@@ -68,18 +65,18 @@ public:
      * @param outState 结束后当前字符的类型
      * @return this_t&
      */
-    this_t &defineEndState(TYPE nowState, TYPE outState) {
+    this_t &defineEndState(const ::std::string &nowState, const ::std::string &outState) {
         this->end_state[nowState] = nowState;
         return *this;
     }
     /**
      * @brief 添加一个关键字
-     * 
+     *
      * @param word 关键字内容
      * @param type 关键字类型
-     * @return this_t& 
+     * @return this_t&
      */
-    this_t &defineKeyWords(std::string word, TYPE type) {
+    this_t &defineKeyWords(const std::string &word, const ::std::string &type) {
         ::std::string now_state;
         std::string name;
         for(auto c : word) {
@@ -90,7 +87,7 @@ public:
                 // 获取原本位置所用的出度
                 auto out = this->whereIgo(replace);
                 for(auto pair : out) {
-                    this->state_change_map[::std::make_pair(type + " in " + word + " when " + name, pair.first)] =  pair.second;
+                    this->state_change_map[::std::make_pair(name, pair.first)] =  pair.second;
                 }
             }
             this->state_change_map[std::make_pair(now_state, c)] = ::std::string(name);
@@ -103,9 +100,9 @@ public:
      * @brief 添加一个关键字
      * 关键字类型就是关键字本身
      * @param word 关键字
-     * @return this_t& 
+     * @return this_t&
      */
-    this_t &defineKeyWords(std::string word) {
+    this_t &defineKeyWords(const std::string &word) {
         return defineKeyWords(word, word);
     }
 public:
@@ -118,7 +115,7 @@ public:
         ::std::vector<token> ans;
         ::std::string now_state;
         text_t buffer = "";
-        int line = 0 , colw = 0;
+        int line = 0, colw = 0;
         for(::std::string::iterator it = context.begin(); it != context.end(); ++it) {
             ++colw;
             if(*it == '\n') {
@@ -203,16 +200,16 @@ protected:
      * @brief 查找终止状态
      *
      * @param type 状态
-     * @return ::std::map<::std::string, TYPE>::const_iterator 状态对应的结束类型或者end()
+     * @return ::std::map<::std::string, ::std::string>::const_iterator 状态对应的结束类型或者end()
      */
-    ::std::map<::std::string, TYPE>::const_iterator query_type(::std::string type)const {
+    ::std::map<::std::string, ::std::string>::const_iterator query_type(::std::string type)const {
         return this->end_state.find(type);
     }
 private:
     // 状态转换函数列表
     ::std::map<std::pair<::std::string, char>, ::std::string> state_change_map;
     // 结束处理列表
-    ::std::map<::std::string, TYPE> end_state;
+    ::std::map<::std::string, ::std::string> end_state;
 };
 
 } // namespace theNext
