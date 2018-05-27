@@ -23,9 +23,12 @@ string readFile(string name) {
 }
 
 int main(const int argc, const char **argv) {
-    string fileName = "/media/pxq/data/cuorse/complie/task/1task/testcase/test_txt/test2.txt";
+    string fileName;
     if(argc == 2) {
         fileName = argv[1];
+    } else {
+        std::cerr << "usage:\n"
+                  << "CompilingPrincipleExperiment ${fileName}" << endl;
     }
     auto lex = ::theNext::threadSetting::getlex();
 
@@ -53,7 +56,6 @@ int main(const int argc, const char **argv) {
             content = std::string(now, content.end());
             now = content.begin();
         }
-        cout << ans.size() << endl;
     }
     for(auto token : ans) {
         cout << token.type << "\t" << token.content << endl;

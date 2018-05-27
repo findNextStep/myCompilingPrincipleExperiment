@@ -15,6 +15,8 @@
 
     - [cpp test] 描述建立新的测试用例
 
+        - [cpp tlex] 针对词法分析程序的测试用例
+
     - [cpp lthr] 描述对于语言thread限制的修改
 
 - [makefile] 描述对`CMakeLists.txt`的修改

@@ -8,4 +8,4 @@ include_directories(
     third/json/include
 )
 
-add_executable(CompilingPrincipleExperiment main.cpp)
+add_executable(functionalTestForLexicalAnalysier src/test/functionalTestForLexicalAnalysier.cpp)
