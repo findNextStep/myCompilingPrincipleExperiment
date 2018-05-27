@@ -49,7 +49,7 @@ int main(const int argc, const char **argv) {
             } else {
                 cl += e.clow - 1;
             }
-            cout << li << ":" << cl << "\t" << e.buffer <<  " when " << *e.end << endl;
+            cout << li + 1 << ":" << cl << "\t" << e.buffer <<  " when " << *e.end << endl;
             if(e.nowState == "") {
                 ++now;
             }
