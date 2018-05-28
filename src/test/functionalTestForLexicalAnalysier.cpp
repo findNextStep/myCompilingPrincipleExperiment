@@ -38,10 +38,12 @@ int main(const int argc, const char **argv) {
     std::vector<theNext::token> ans;
     ::std::string::iterator now = content.begin();
     int li = 0, cl = 0;
+    bool catchError = false;
     while(now != content.end() && ans.size() == 0) {
         try {
             ans = lex.analysis(content);
         } catch(const ::theNext::lexicalAnalysierFailExctption &e) {
+            catchError = true;
             now = e.end;
             li += e.line;
             if(e.line != 0) {
@@ -57,8 +59,10 @@ int main(const int argc, const char **argv) {
             now = content.begin();
         }
     }
-    for(auto token : ans) {
-        cout << token.type << "\t" << token.content << endl;
+    if(!catchError) {
+        for(auto token : ans) {
+            cout << token.type << "\t" << token.content << endl;
+        }
     }
     return 0;
 }
