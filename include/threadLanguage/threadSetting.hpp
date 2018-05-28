@@ -41,6 +41,7 @@ auto getlex() {
         ans.addStateChangeWay(identifier, a + 'A' - 'a', identifier);
     }
     ans.addStateChangeWay(identifier, '_', identifier);
+    ans.addStateChangeWay(start,'_',identifier);
 
     for(char a = '0'; a <= '9'; ++a) {
         ans.addStateChangeWay(identifier, a, identifier);
