@@ -51,7 +51,8 @@ int main(const int argc, const char **argv) {
             } else {
                 cl += e.clow - 1;
             }
-            cout << li + 1 << ":" << cl << "\t" << e.buffer <<  " when " << *e.end << endl;
+            // cout << li + 1 << ":" << cl << "\t" << e.buffer <<  " when " << *e.end << endl;
+            cout << "Unrecognizable characters" << *e.end << " in line " << li + 1 << ":" << cl << endl;
             if(e.nowState == "") {
                 ++now;
             }
