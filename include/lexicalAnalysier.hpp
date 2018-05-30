@@ -14,9 +14,13 @@ class lexicalAnalysierFailExctption: public ::std::exception {
 public:
     int line;
     int clow;
+    // 当前分析的结尾
     ::std::string::iterator end;
+    // 错误信息
     ::std::string errorMessage;
+    // 当前缓冲中的内容
     ::std::string buffer;
+    // 当前状态
     ::std::string nowState;
     ::std::string what() {
         std::stringstream ss;
@@ -113,22 +117,30 @@ public:
      */
     ::std::vector<token> analysis(::std::string &context) const {
         ::std::vector<token> ans;
+        // 记录当前状态，空状态为初始状态
         ::std::string now_state;
+        // 分析内容缓存
         text_t buffer = "";
+        // 记录行列数
         int line = 0, colw = 0;
         for(::std::string::iterator it = context.begin(); it != context.end(); ++it) {
+            // 列数++
             ++colw;
             if(*it == '\n') {
+                // 遇到回车行数++，列数归零
                 ++line;
                 colw = 0;
             }
+            // 如果状态重置，清空缓存
             if(now_state == ::std::string()) {
                 buffer = "";
             }
             if(this->query_state(now_state, *it) != this->state_change_map.end()) {
+                // 发现符合状态转换的自动机转化
                 now_state = query_state(now_state, *it)->second;
                 buffer += *it;
             } else if(this->query_type(now_state) != this->end_state.end()) {
+                // 没有符合的转化，判断是不是一个结束状态
                 token n;
                 n.content = buffer;
                 n.type = this->query_type(now_state)->second;
@@ -137,6 +149,7 @@ public:
                 buffer = "";
                 it--;
             } else {
+                // 没有自动机匹配，也不是终止状态，报错
                 lexicalAnalysierFailExctption error;
                 error.line = line;
                 error.clow = colw;
