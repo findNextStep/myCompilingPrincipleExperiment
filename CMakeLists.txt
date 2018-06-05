@@ -5,7 +5,7 @@ add_compile_options(-std=c++14)
 
 include_directories(
     include
-    third/json/include
+    third/json/single_include
 )
 
 add_executable(functionalTestForLexicalAnalysier src/test/functionalTestForLexicalAnalysier.cpp)
