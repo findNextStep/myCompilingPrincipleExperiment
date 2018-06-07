@@ -123,14 +123,17 @@ public:
         text_t buffer = "";
         // 记录行列数
         int line = 0, colw = 0;
+        // 记录上一个字符，用于换行统计
+        char last_char = ' ';
         for(::std::string::iterator it = context.begin(); it != context.end(); ++it) {
             // 列数++
             ++colw;
-            if(*it == '\n') {
+            if(*it == '\n' && last_char != '\r' || *it == '\r') {
                 // 遇到回车行数++，列数归零
                 ++line;
                 colw = 0;
             }
+            last_char = *it;
             // 如果状态重置，清空缓存
             if(now_state == ::std::string()) {
                 buffer = "";
@@ -168,21 +171,7 @@ public:
         }
         return ans;
     }
-    /**
-     * @brief 文件预处理
-     * 主要内容为将\r\n和\r更换为\n
-     * @param content 需要处理的字符串
-     */
-    void static preprocessing(::std::string &content) {
-        for(auto it = content.begin(); it != content.end(); ++it) {
-            if(*it == '\r') {
-                *it = '\n';
-                if(*(it + 1) == '\n') {
-                    *it = ' ';
-                }
-            }
-        }
-    }
+
 protected:
     /**
      * @brief 返回一个DFA节点的全部出度

@@ -33,7 +33,6 @@ int main(const int argc, const char **argv) {
     auto lex = ::theNext::threadSetting::getlex();
 
     auto content = readFile(fileName);
-    ::theNext::lexicalAnalysier::preprocessing(content);
 
     std::vector<theNext::token> ans;
     ::std::string::iterator now = content.begin();
