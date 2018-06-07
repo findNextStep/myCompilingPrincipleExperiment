@@ -12,9 +12,17 @@ add_library(
     token
     src/lib/token.cpp
 )
+add_library(
+    lexicalAnalysier
+    src/lib/lexicalAnalysier.cpp
+)
+target_link_libraries(
+    lexicalAnalysier
+    token
+)
 
 add_executable(functionalTestForLexicalAnalysier src/test/functionalTestForLexicalAnalysier.cpp)
 target_link_libraries(
     functionalTestForLexicalAnalysier
-    token
+    lexicalAnalysier
 )
