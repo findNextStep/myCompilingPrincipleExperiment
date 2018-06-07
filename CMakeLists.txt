@@ -8,4 +8,13 @@ include_directories(
     third/json/single_include
 )
 
+add_library(
+    token
+    src/lib/token.cpp
+)
+
 add_executable(functionalTestForLexicalAnalysier src/test/functionalTestForLexicalAnalysier.cpp)
+target_link_libraries(
+    functionalTestForLexicalAnalysier
+    token
+)

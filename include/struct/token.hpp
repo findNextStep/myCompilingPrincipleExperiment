@@ -17,17 +17,7 @@ struct token {
      * @brief 词法分析的结果
      */
     ::std::string type;
-    auto toJson() {
-        ::nlohmann::json ans;
-        ans["type"] = this->type;
-        ans["content"] = this->content;
-        return ans;
-    }
-    auto static fromJson(::nlohmann::json json) {
-        token ans;
-        ans.content = json["content"];
-        ans.type = json["type"];
-        return ans;
-    }
+    ::nlohmann::json toJson();
+    token static fromJson(::nlohmann::json json);
 };
 } // namespace theNext
