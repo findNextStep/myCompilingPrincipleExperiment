@@ -11,6 +11,6 @@ int main() {
     ana.addGramaticRule("featureSpec", rule_t({"portSpec"}));
     ana.addGramaticRule("portSpec",
                         rule_t({"identifier", ":", "IOtype", "portType"}),
-                        optional(repeat({"{", "association", "}"})));
+                        option_and_repeat({"{", "association", "}"}));
     return 0;
 }

@@ -13,7 +13,10 @@ class repeat : public rule_t {
 public:
     repeat(rule_t init): rule_t (init) {}
 };
-
+class option_and_repeat : public rule_t {
+public:
+    option_and_repeat(rule_t init): rule_t (init) {}
+};
 /**
  * @brief
  * reg_base(type)

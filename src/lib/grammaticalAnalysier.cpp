@@ -4,6 +4,7 @@
 using ::std::cout;
 using ::std::endl;
 namespace theNext {
+
 template<>
 void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, rule_t add_rule) {
     for(auto s : add_rule) {
@@ -43,6 +44,21 @@ void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, repeat ad
 template<>
 void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, std::initializer_list<::std::string>add) {
     return makeRule<rule_t>(total_rule, add);
+}
+
+template<>
+void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, option_and_repeat add_rule) {
+    std::string name = "";
+    for(auto n : add_rule) {
+        if(name == "") {
+            name = n;
+        } else {
+            name += "_" + n;
+        }
+    }
+    name = "repeat_" + name;
+    this->addGramaticRule<rule_t>(name, (rule_t)add_rule);
+    return makeRule(total_rule,  optional({name}));
 }
 
 void grammaticalAnalysier::add_rule(const ::std::string name, const ::std::vector<rule_t> &total_rule) {
