@@ -13,6 +13,7 @@ class repeat : public rule_t {
 public:
     repeat(rule_t init): rule_t (init) {}
 };
+
 /**
  * @brief
  * reg_base(type)
@@ -31,41 +32,37 @@ public:
     ~grammaticalAnalysier() {}
     template <typename T, typename...Args>
     grammaticalAnalysier &addGramaticRule(const ::std::string &rulename, T number1 , Args... numbers) {
-        rule_t name_list;
         ::std::vector<rule_t> total_rule(1);
-        name_list.push_back(rulename);
-        addGramaticRule(name_list, total_rule, number1, numbers...);
-        add_rule(name_list, total_rule);
+        addGramaticRule(total_rule, number1, numbers...);
+        add_rule(rulename, total_rule);
         return *this;
     }
     template <typename T>
     grammaticalAnalysier &addGramaticRule(const ::std::string &rulename, T number1) {
-        rule_t name_list;
         ::std::vector<rule_t> total_rule(1);
-        name_list.push_back(rulename);
-        addGramaticRule(name_list, total_rule, number1);
-        add_rule(name_list, total_rule);
+        addGramaticRule(total_rule, number1);
+        add_rule(rulename, total_rule);
         return *this;
     }
 
 protected:
     template <typename T, typename...Args>
-    grammaticalAnalysier &addGramaticRule(rule_t &name_list, ::std::vector<rule_t> &total_rule,
+    grammaticalAnalysier &addGramaticRule(::std::vector<rule_t> &total_rule,
                                           T number1 , Args... numbers) {
-        makeRule<T>(name_list, total_rule, number1);
-        return addGramaticRule(name_list, total_rule, numbers...);
+        makeRule<T>(total_rule, number1);
+        return addGramaticRule(total_rule, numbers...);
     }
     template <typename T>
-    grammaticalAnalysier &addGramaticRule(rule_t &name_list, ::std::vector<rule_t> &total_rule,
+    grammaticalAnalysier &addGramaticRule(::std::vector<rule_t> &total_rule,
                                           T number1) {
-
-        makeRule<T>(name_list, total_rule, number1);
+        makeRule<T>(total_rule, number1);
         return *this;
     }
-    void add_rule(const rule_t &name_list, const ::std::vector<rule_t> &total_rule);
+    void add_rule(const ::std::string name, const ::std::vector<rule_t> &total_rule);
     template<typename T>
-    void makeRule(rule_t &name_list, ::std::vector<rule_t> &total_rule, T add_rule);
+    void makeRule(::std::vector<rule_t> &total_rule, T add_rule);
 private:
+    std::map<std::string, std::vector<rule_t> >all_rule;
 
 };
 } // namespace theNext
