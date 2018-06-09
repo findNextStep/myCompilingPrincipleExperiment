@@ -21,8 +21,20 @@ target_link_libraries(
     token
 )
 
+add_library(
+    grammaticalAnalysier
+    src/lib/grammaticalAnalysier.cpp
+)
 add_executable(functionalTestForLexicalAnalysier src/test/functionalTestForLexicalAnalysier.cpp)
 target_link_libraries(
     functionalTestForLexicalAnalysier
     lexicalAnalysier
+)
+
+add_executable(grammaticalAnalysierTest
+src/test/grammaticalAnalysierTest.cpp)
+
+target_link_libraries(
+    grammaticalAnalysierTest
+    grammaticalAnalysier
 )
