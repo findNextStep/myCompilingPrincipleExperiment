@@ -38,11 +38,25 @@
 
   - lexicalAnalysier.hpp
 
-    词法分析程序实现
+    词法分析程序的声明
+
+  - grammaticalAnalysier.hpp
+
+    语法分析程序的声明
 
 - src
 
   编译程序
+  
+  - lib 
+
+  　实现代码
+
+    - grammaticalAnalysier.cpp
+
+    - lexicalAnalysier.cpp
+
+    - token.cpp
 
   - test
 
