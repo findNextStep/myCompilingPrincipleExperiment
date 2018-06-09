@@ -29,8 +29,6 @@ public:
  */
 class grammaticalAnalysier {
 public:
-    typedef ::std::map<::std::string, ::std::string> state_mecian;
-
     grammaticalAnalysier() {}
     ~grammaticalAnalysier() {}
     template <typename T, typename...Args>
@@ -47,6 +45,12 @@ public:
         add_rule(rulename, total_rule);
         return *this;
     }
+    grammaticalAnalysier &setEndRule(const ::std::string &name) {
+        this->end_rule = name;
+        return *this;
+    }
+
+    grammaticalAnalysier &makeDFA();
 
 protected:
     template <typename T, typename...Args>
@@ -61,11 +65,19 @@ protected:
         makeRule<T>(total_rule, number1);
         return *this;
     }
+    bool isToken(std::string) const;
+    void remove_repeat();
     void add_rule(const ::std::string name, const ::std::vector<rule_t> &total_rule);
     template<typename T>
     void makeRule(::std::vector<rule_t> &total_rule, T add_rule);
 private:
+    /**
+     * @brief 
+     * [自动机标号<<转换token,期待结尾> ,跳转为结尾]
+     */
+    typedef ::std::vector<std::map<std::pair<::std::string,::std::string>, int> > state_machine;
     std::map<std::string, std::vector<rule_t> >all_rule;
-
+    std::string end_rule;
+    state_machine state_map;
 };
 } // namespace theNext

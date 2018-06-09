@@ -1,5 +1,6 @@
 #include "grammaticalAnalysier.hpp"
 #include <iostream>
+#include <algorithm>
 
 using ::std::cout;
 using ::std::endl;
@@ -62,15 +63,39 @@ void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, option_an
 }
 
 void grammaticalAnalysier::add_rule(const ::std::string name, const ::std::vector<rule_t> &total_rule) {
-    cout << name << endl;
     for(auto rule : total_rule) {
         this->all_rule[name].push_back(rule);
-        cout << "\t";
-        for(auto content : rule) {
-            cout << content << '\t';
+    }
+}
+
+grammaticalAnalysier &grammaticalAnalysier::makeDFA() {
+    this->remove_repeat();
+    for(auto rule : this->all_rule) {
+        cout << rule.first << endl;
+        for(auto s : rule.second) {
+            for(auto c : s) {
+                cout << "\t" << c;
+            }
+            cout << endl;
         }
         cout << endl;
     }
-    cout << endl;
+    return *this;
+}
+
+void grammaticalAnalysier::remove_repeat() {
+    for(auto it = all_rule.begin(); it != all_rule.end(); ++it) {
+        std::sort(it->second.begin(), it->second.end());
+        for(int i = 1; i < it->second.size(); ++i) {
+            if(it->second[i - 1] == it->second[i]) {
+                it->second.erase(it->second.begin() + i - 1);
+                i--;
+            }
+        }
+    }
+}
+
+bool grammaticalAnalysier::isToken(std::string name) const {
+    return this->all_rule.find(name) == this->all_rule.end();
 }
 }// namespace theNext
