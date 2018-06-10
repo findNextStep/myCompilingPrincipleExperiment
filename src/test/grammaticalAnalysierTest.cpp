@@ -57,7 +57,7 @@ int main() {
     ana.setEndRule("ThreadSpec");
 
     // ana.addGramaticRule("A", rule_t({"{", "A", "}"}));
-    // ana.addGramaticRule("A",rule_t({"a"}));
+    // ana.addGramaticRule("A",option_and_repeat({"a"}));
     // ana.addGramaticRule("A",rule_t());
     // ana.setEndRule("A");
     ana.makeDFA();

@@ -68,6 +68,7 @@ protected:
     bool isToken(std::string) const;
     void remove_repeat();
     virtual void add_rule(const ::std::string name, const rule_t &total_rule);
+    virtual void add_end(const int n, const rule_t rule);
     template<typename T>
     void makeRule(rule_t &total_rule, T add_rule);
     void set_to(std::string name, std::string end, int start);
@@ -79,6 +80,7 @@ private:
     typedef ::std::vector<std::map<::std::string, int> > state_machine;
     ::std::map<::std::pair<::std::string, ::std::string>, int> query;
     std::map<std::string, std::vector<rule_t> >all_rule;
+    std::map<int, rule_t> in_a_end;
     std::string end_rule;
     state_machine state_map;
 };
