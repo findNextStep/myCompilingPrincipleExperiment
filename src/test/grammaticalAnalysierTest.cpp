@@ -54,7 +54,12 @@ int main() {
     ana.addGramaticRule("packageName",
                         repeat({"identifier", "::"}),
                         rule_t({"identifier"}));
-                        ana.setEndRule("ThreadSpec");
+    ana.setEndRule("ThreadSpec");
+
+    // ana.addGramaticRule("A", rule_t({"{", "A", "}"}));
+    // ana.addGramaticRule("A",rule_t({"a"}));
+    // ana.addGramaticRule("A",rule_t());
+    // ana.setEndRule("A");
     ana.makeDFA();
 
     return 0;

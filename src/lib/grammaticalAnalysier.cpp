@@ -88,15 +88,13 @@ grammaticalAnalysier &grammaticalAnalysier::makeDFA() {
         cout << endl;
     }
     this->state_map.resize(1);
-    for(auto rule : this->all_rule[this->end_rule]) {
-        this->set_to(this->end_rule, rule, "", 0);
-    }
+    this->set_to(this->end_rule, "", 0);
     int i = 0;
     for(auto path : this->state_map) {
         // cout << i << endl;
         for(auto role : path) {
             cout
-                    // << "\t"
+            // << "\t"
                     << i << " --\"" << role.first << "\"--> " << role.second << endl;
         }
         // cout << endl;
@@ -124,42 +122,76 @@ bool grammaticalAnalysier::isToken(std::string name) const {
 }
 
 
-void grammaticalAnalysier::set_to(std::string name, rule_t rule, std::string end, int start) {
-    this->query[std::make_pair(name, end)] = start;
-    int now = start;
-    std::vector<std::pair<int , int> > need_to_link;
-    for(int i = 0; i < rule.size(); ++i) {
-        auto path  = rule[i];
-        if(!this->isToken(path)) {
-            auto it = this->query.find(std::make_pair(path, end));
-            if(it != this->query.end()) {
-                for(auto rule : all_rule[path]) {
-                    if(rule.size()) {
-                        this->state_map[now][rule[0]] = this->state_map[it->second][rule[0]];
+void grammaticalAnalysier::set_to(std::string name, std::string end, int start) {
+    // if(this->query.find(std::make_pair(name, end)) != this->query.end()) {
+    //     return;
+    // }
+    std::vector<std::pair<std::pair<std::string, std::string>, int> > need_to_link;
+    cout << "------------------\n";
+    cout << name + "\t" + end + "\t" << start << endl;
+    for(auto rule : this->all_rule[name]) {
+        int now = start;
+        for(int i = 0; i < rule.size(); ++i) {
+            const auto path  = rule[i];
+            if(!this->isToken(path)) {
+                std::string path_end = end;
+                if(i != rule.size() - 1) {
+                    path_end = rule[i + 1];
+                }
+                auto it = this->query.find(std::make_pair(path, path_end));
+                if(it != this->query.end()) {
+                    /* 如果存在，提前计算 */
+                    for(auto rule : all_rule[path]) {
+                        // this->set_to(path, path_end, it->second);
+                        if(rule.size()) {
+                            if(state_map[now].find(rule[0]) != state_map[now].end()) {
+                                cout << "test" << endl;
+                                now =  state_map[now][rule[0]];
+                            } else {
+                                this->state_map[now][rule[0]] = this->state_map[it->second][rule[0]];
+                                // cout << it->second << endl;
+                                cout <<
+                                     //  "link : " <<
+                                     now << " --\"" << rule[0] << "\"--> " << this->state_map[now][rule[0]] << endl;
+                            }
+
+                        }
                     }
+                } else {
+                    need_to_link.push_back(std::make_pair(std::make_pair(path, path_end) , now));
+                }
+                if(state_map[now].find(path) != state_map[now].end()) {
+                    cout << "test" << endl;
+                    now = state_map[now][path];
+                } else {
+                    this->state_map[now][path] = this->state_map.size();
+                    cout <<
+                         //  "crea : " <<
+                         now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
+
+                    now = this->state_map.size();
+                    this->state_map.resize(this->state_map.size() + 1);
                 }
             } else {
-                need_to_link.push_back(std::make_pair(i, now));
+                if(state_map[now].find(path) != state_map[now].end()) {
+                    cout << "test" << endl;
+                    now = state_map[now][path];
+                } else {
+                    this->state_map[now][path] = this->state_map.size();
+                    cout <<
+                         //  "crea : " <<
+                         now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
+
+                    now = this->state_map.size();
+                    this->state_map.resize(this->state_map.size() + 1);
+                }
             }
-            this->state_map[now][path] = this->state_map.size();
-            now = this->state_map.size();
-            this->state_map.resize(this->state_map.size() + 1);
-        } else {
-            this->state_map[now][path] = this->state_map.size();
-            now = this->state_map.size();
-            this->state_map.resize(this->state_map.size() + 1);
         }
     }
+    this->query[std::make_pair(name, end)] = start;
+    cout << endl;
     for(auto link : need_to_link) {
-        for(auto sonrule : all_rule[rule[link.first]]) {
-            std::string ends;
-            if(link.first + 1 != rule.size()) {
-                ends = rule[link.first + 1];
-            } else {
-                ends = end;
-            }
-            this->set_to(rule[link.first], sonrule, ends, link.second);
-        }
+        this->set_to(link.first.first, link.first.second, link.second);
     }
     return;
 }

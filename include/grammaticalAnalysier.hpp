@@ -70,7 +70,7 @@ protected:
     virtual void add_rule(const ::std::string name, const rule_t &total_rule);
     template<typename T>
     void makeRule(rule_t &total_rule, T add_rule);
-    void set_to(std::string name, rule_t rule, std::string end, int start);
+    void set_to(std::string name, std::string end, int start);
 private:
     /**
      * @brief
