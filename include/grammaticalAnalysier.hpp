@@ -32,7 +32,7 @@ public:
     grammaticalAnalysier() {}
     ~grammaticalAnalysier() {}
     template <typename T, typename...Args>
-    grammaticalAnalysier &addGramaticRule(const ::std::string &rulename, T number1 , Args... numbers) {
+    grammaticalAnalysier &addGramaticRule(const ::std::string &rulename, T number1, Args... numbers) {
         rule_t total_rule;
         addGramaticRule(total_rule, number1, numbers...);
         add_rule(rulename, total_rule);
@@ -55,7 +55,7 @@ public:
 protected:
     template <typename T, typename...Args>
     grammaticalAnalysier &addGramaticRule(rule_t &total_rule,
-                                          T number1 , Args... numbers) {
+                                          T number1, Args... numbers) {
         makeRule<T>(total_rule, number1);
         return addGramaticRule(total_rule, numbers...);
     }
@@ -67,15 +67,17 @@ protected:
     }
     bool isToken(std::string) const;
     void remove_repeat();
-    void add_rule(const ::std::string name, const rule_t &total_rule);
+    virtual void add_rule(const ::std::string name, const rule_t &total_rule);
     template<typename T>
     void makeRule(rule_t &total_rule, T add_rule);
+    void set_to(std::string name, rule_t rule, std::string end, int start);
 private:
     /**
      * @brief
      * [自动机标号<<转换token,期待结尾> ,跳转为结尾]
      */
-    typedef ::std::vector<std::map<std::pair<::std::string, ::std::string>, int> > state_machine;
+    typedef ::std::vector<std::map<::std::string, int> > state_machine;
+    ::std::map<::std::pair<::std::string, ::std::string>, int> query;
     std::map<std::string, std::vector<rule_t> >all_rule;
     std::string end_rule;
     state_machine state_map;

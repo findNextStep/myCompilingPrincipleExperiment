@@ -79,6 +79,7 @@ grammaticalAnalysier &grammaticalAnalysier::makeDFA() {
     for(auto rule : this->all_rule) {
         cout << rule.first << endl;
         for(auto s : rule.second) {
+            cout << "-->";
             for(auto c : s) {
                 cout << "\t" << c;
             }
@@ -86,12 +87,29 @@ grammaticalAnalysier &grammaticalAnalysier::makeDFA() {
         }
         cout << endl;
     }
+    this->state_map.resize(1);
+    for(auto rule : this->all_rule[this->end_rule]) {
+        this->set_to(this->end_rule, rule, "", 0);
+    }
+    int i = 0;
+    for(auto path : this->state_map) {
+        // cout << i << endl;
+        for(auto role : path) {
+            cout
+                    // << "\t"
+                    << i << " --\"" << role.first << "\"--> " << role.second << endl;
+        }
+        // cout << endl;
+        ++i;
+    }
     return *this;
 }
 
 void grammaticalAnalysier::remove_repeat() {
     for(auto it = all_rule.begin(); it != all_rule.end(); ++it) {
-        std::sort(it->second.begin(), it->second.end());
+        std::sort(it->second.begin(), it->second.end(), [](auto a, auto b) {
+            return a > b;
+        });
         for(int i = 1; i < it->second.size(); ++i) {
             if(it->second[i - 1] == it->second[i]) {
                 it->second.erase(it->second.begin() + i - 1);
@@ -103,5 +121,46 @@ void grammaticalAnalysier::remove_repeat() {
 
 bool grammaticalAnalysier::isToken(std::string name) const {
     return this->all_rule.find(name) == this->all_rule.end();
+}
+
+
+void grammaticalAnalysier::set_to(std::string name, rule_t rule, std::string end, int start) {
+    this->query[std::make_pair(name, end)] = start;
+    int now = start;
+    std::vector<std::pair<int , int> > need_to_link;
+    for(int i = 0; i < rule.size(); ++i) {
+        auto path  = rule[i];
+        if(!this->isToken(path)) {
+            auto it = this->query.find(std::make_pair(path, end));
+            if(it != this->query.end()) {
+                for(auto rule : all_rule[path]) {
+                    if(rule.size()) {
+                        this->state_map[now][rule[0]] = this->state_map[it->second][rule[0]];
+                    }
+                }
+            } else {
+                need_to_link.push_back(std::make_pair(i, now));
+            }
+            this->state_map[now][path] = this->state_map.size();
+            now = this->state_map.size();
+            this->state_map.resize(this->state_map.size() + 1);
+        } else {
+            this->state_map[now][path] = this->state_map.size();
+            now = this->state_map.size();
+            this->state_map.resize(this->state_map.size() + 1);
+        }
+    }
+    for(auto link : need_to_link) {
+        for(auto sonrule : all_rule[rule[link.first]]) {
+            std::string ends;
+            if(link.first + 1 != rule.size()) {
+                ends = rule[link.first + 1];
+            } else {
+                ends = end;
+            }
+            this->set_to(rule[link.first], sonrule, ends, link.second);
+        }
+    }
+    return;
 }
 }// namespace theNext

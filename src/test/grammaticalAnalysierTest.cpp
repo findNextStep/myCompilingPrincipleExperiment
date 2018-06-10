@@ -54,6 +54,7 @@ int main() {
     ana.addGramaticRule("packageName",
                         repeat({"identifier", "::"}),
                         rule_t({"identifier"}));
+                        ana.setEndRule("ThreadSpec");
     ana.makeDFA();
 
     return 0;
