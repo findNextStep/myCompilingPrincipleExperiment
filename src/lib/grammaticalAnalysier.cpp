@@ -7,27 +7,14 @@ using ::std::endl;
 namespace theNext {
 
 template<>
-void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, rule_t add_rule) {
-    for(auto s : add_rule) {
-        for(auto it = total_rule.begin(); it != total_rule.end(); ++it) {
-            it->push_back(s);
-        }
+void grammaticalAnalysier::makeRule(rule_t &total_rule, rule_t add_rule) {
+    for(auto rule : add_rule) {
+        total_rule.push_back(rule);
     }
 }
 
 template<>
-void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, optional add_rule) {
-    int size = total_rule.size();
-    // 复制并重构
-    for(int i = 0; i < size; ++i) {
-        total_rule.push_back(total_rule.at(i));
-        for(auto s : add_rule) {
-            total_rule.at(i).push_back(s);
-        }
-    }
-}
-template<>
-void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, repeat add_rule) {
+void grammaticalAnalysier::makeRule(rule_t &total_rule, optional add_rule) {
     std::string name = "";
     for(auto n : add_rule) {
         if(name == "") {
@@ -36,19 +23,13 @@ void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, repeat ad
             name += "_" + n;
         }
     }
-    this->addGramaticRule<rule_t>("repeat_" + name, (rule_t)add_rule);
-    for(auto it = total_rule.begin(); it != total_rule.end(); ++it) {
-        it->push_back(name);
-    }
-}
+    this->addGramaticRule<rule_t>("option_" + name, (rule_t)add_rule);
+    this->addGramaticRule<rule_t>("option_" + name, rule_t());
+    total_rule.push_back("option_" + name);
 
-template<>
-void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, std::initializer_list<::std::string>add) {
-    return makeRule<rule_t>(total_rule, add);
 }
-
 template<>
-void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, option_and_repeat add_rule) {
+void grammaticalAnalysier::makeRule(rule_t &total_rule, repeat add_rule) {
     std::string name = "";
     for(auto n : add_rule) {
         if(name == "") {
@@ -59,13 +40,38 @@ void grammaticalAnalysier::makeRule(::std::vector<rule_t> &total_rule, option_an
     }
     name = "repeat_" + name;
     this->addGramaticRule<rule_t>(name, (rule_t)add_rule);
-    return makeRule(total_rule,  optional({name}));
+    auto repeat_rule = add_rule;
+    repeat_rule.push_back(name);
+    this->addGramaticRule<rule_t>(name, (rule_t)repeat_rule);
+    total_rule.push_back(name);
 }
 
-void grammaticalAnalysier::add_rule(const ::std::string name, const ::std::vector<rule_t> &total_rule) {
-    for(auto rule : total_rule) {
-        this->all_rule[name].push_back(rule);
+template<>
+void grammaticalAnalysier::makeRule(rule_t &total_rule, std::initializer_list<::std::string>add) {
+    return makeRule<rule_t>(total_rule, add);
+}
+
+template<>
+void grammaticalAnalysier::makeRule(rule_t &total_rule, option_and_repeat add_rule) {
+    std::string name = "";
+    for(auto n : add_rule) {
+        if(name == "") {
+            name = n;
+        } else {
+            name += "_" + n;
+        }
     }
+    name = "repeat_or_option_" + name;
+    this->addGramaticRule<rule_t>(name, (rule_t)add_rule);
+    auto repeat_rule = add_rule;
+    repeat_rule.push_back(name);
+    this->addGramaticRule<rule_t>(name, (rule_t)repeat_rule);
+    this->addGramaticRule<rule_t>(name, rule_t());
+    total_rule.push_back(name);
+}
+
+void grammaticalAnalysier::add_rule(const ::std::string name, const rule_t &total_rule) {
+    this->all_rule[name].push_back(total_rule);
 }
 
 grammaticalAnalysier &grammaticalAnalysier::makeDFA() {

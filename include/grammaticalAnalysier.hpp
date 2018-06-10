@@ -33,14 +33,14 @@ public:
     ~grammaticalAnalysier() {}
     template <typename T, typename...Args>
     grammaticalAnalysier &addGramaticRule(const ::std::string &rulename, T number1 , Args... numbers) {
-        ::std::vector<rule_t> total_rule(1);
+        rule_t total_rule;
         addGramaticRule(total_rule, number1, numbers...);
         add_rule(rulename, total_rule);
         return *this;
     }
     template <typename T>
     grammaticalAnalysier &addGramaticRule(const ::std::string &rulename, T number1) {
-        ::std::vector<rule_t> total_rule(1);
+        rule_t total_rule;
         addGramaticRule(total_rule, number1);
         add_rule(rulename, total_rule);
         return *this;
@@ -54,28 +54,28 @@ public:
 
 protected:
     template <typename T, typename...Args>
-    grammaticalAnalysier &addGramaticRule(::std::vector<rule_t> &total_rule,
+    grammaticalAnalysier &addGramaticRule(rule_t &total_rule,
                                           T number1 , Args... numbers) {
         makeRule<T>(total_rule, number1);
         return addGramaticRule(total_rule, numbers...);
     }
     template <typename T>
-    grammaticalAnalysier &addGramaticRule(::std::vector<rule_t> &total_rule,
+    grammaticalAnalysier &addGramaticRule(rule_t &total_rule,
                                           T number1) {
         makeRule<T>(total_rule, number1);
         return *this;
     }
     bool isToken(std::string) const;
     void remove_repeat();
-    void add_rule(const ::std::string name, const ::std::vector<rule_t> &total_rule);
+    void add_rule(const ::std::string name, const rule_t &total_rule);
     template<typename T>
-    void makeRule(::std::vector<rule_t> &total_rule, T add_rule);
+    void makeRule(rule_t &total_rule, T add_rule);
 private:
     /**
-     * @brief 
+     * @brief
      * [自动机标号<<转换token,期待结尾> ,跳转为结尾]
      */
-    typedef ::std::vector<std::map<std::pair<::std::string,::std::string>, int> > state_machine;
+    typedef ::std::vector<std::map<std::pair<::std::string, ::std::string>, int> > state_machine;
     std::map<std::string, std::vector<rule_t> >all_rule;
     std::string end_rule;
     state_machine state_map;
