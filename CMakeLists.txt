@@ -25,6 +25,11 @@ add_library(
     grammaticalAnalysier
     src/lib/grammaticalAnalysier.cpp
 )
+target_link_libraries(
+    grammaticalAnalysier
+    token
+)
+
 add_executable(functionalTestForLexicalAnalysier src/test/functionalTestForLexicalAnalysier.cpp)
 target_link_libraries(
     functionalTestForLexicalAnalysier

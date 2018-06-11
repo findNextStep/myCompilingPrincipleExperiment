@@ -1,9 +1,9 @@
 #include "grammaticalAnalysier.hpp"
-#include <iostream>
+// #include <iostream>
 #include <algorithm>
 
-using ::std::cout;
-using ::std::endl;
+// using ::std::cout;
+// using ::std::endl;
 namespace theNext {
 
 template<>
@@ -56,9 +56,9 @@ void grammaticalAnalysier::makeRule(rule_t &total_rule, option_and_repeat add_ru
     /* 创建一个规则 */
     rule_t rule;
     /* 为这个规则添加一个重复的规则 */
-    makeRule<repeat>(rule,add_rule);
+    makeRule<repeat>(rule, add_rule);
     /* 将这个规则作为当前规则的可选项 */
-    makeRule<optional>(total_rule,rule);
+    makeRule<optional>(total_rule, rule);
 }
 
 void grammaticalAnalysier::add_rule(const ::std::string name, const rule_t &total_rule) {
@@ -67,26 +67,25 @@ void grammaticalAnalysier::add_rule(const ::std::string name, const rule_t &tota
 
 grammaticalAnalysier &grammaticalAnalysier::makeDFA() {
     this->remove_repeat();
-    for(auto rule : this->all_rule) {
-        cout << rule.first << endl;
-        for(auto s : rule.second) {
-            cout << "-->";
-            for(auto c : s) {
-                cout << "\t" << c;
-            }
-            cout << endl;
-        }
-        cout << endl;
-    }
+    // for(auto rule : this->all_rule) {
+    //     cout << rule.first << endl;
+    //     for(auto s : rule.second) {
+    //         cout << "-->";
+    //         for(auto c : s) {
+    //             cout << "\t" << c;
+    //         }
+    //         cout << endl;
+    //     }
+    //     cout << endl;
+    // }
     this->state_map.resize(1);
     this->set_to(this->end_rule, "", 0);
     int i = 0;
     for(auto path : this->state_map) {
         // cout << i << endl;
         for(auto role : path) {
-            cout
-            // << "\t"
-                    << i << " --\"" << role.first << "\"--> " << role.second << endl;
+            // cout <<
+            //      "\t" << i << " --\"" << role.first << "\"--> " << role.second << endl;
         }
         // cout << endl;
         ++i;
@@ -141,9 +140,9 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                             } else {
                                 this->state_map[now][rule[0]] = this->state_map[it->second][rule[0]];
                                 // cout << it->second << endl;
-                                cout <<
-                                     //  "link : " <<
-                                     now << " --\"" << rule[0] << "\"--> " << this->state_map[now][rule[0]] << endl;
+                                // cout <<
+                                //       "link : " <<
+                                //      now << " --\"" << rule[0] << "\"--> " << this->state_map[now][rule[0]] << endl;
                             }
 
                         }
@@ -155,9 +154,9 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                     now = state_map[now][path];
                 } else {
                     this->state_map[now][path] = this->state_map.size();
-                    cout <<
-                         //  "crea : " <<
-                         now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
+                    // cout <<
+                    //       "crea : " <<
+                    //      now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
 
                     now = this->state_map.size();
                     this->state_map.resize(this->state_map.size() + 1);
@@ -167,37 +166,30 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                     now = state_map[now][path];
                 } else {
                     this->state_map[now][path] = this->state_map.size();
-                    cout <<
-                         //  "crea : " <<
-                         now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
+                    // cout <<
+                    //       "crea : " <<
+                    //      now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
 
                     now = this->state_map.size();
                     this->state_map.resize(this->state_map.size() + 1);
                 }
             }
-            if(now == 66) {
-                cout << "test" << endl;
-            }
         }
         this->add_end(now, rule);
     }
     this->query[std::make_pair(name, end)] = start;
-    cout << endl;
+    // cout << endl;
     for(auto link : need_to_link) {
         this->set_to(link.first.first, link.first.second, link.second);
     }
     return;
 }
 void grammaticalAnalysier::add_end(const int n, const rule_t rule) {
-    if(n == 47) {
-        cout << "threr" << endl;
-    }
     if(in_a_end.find(n) == in_a_end.end()) {
         this->in_a_end[n] = rule;
     } else if(in_a_end[n] == rule) {
         return;
     } else {
-        cout << "noooooooo" << endl;
         exit(-1);
     }
 }
