@@ -81,7 +81,6 @@ int main() {
     // ana.addGramaticRule("A",rule_t());
     // ana.setEndRule("A");
     ana.makeDFA();
-    cout << "??" << endl;
     auto lex = theNext::threadSetting::getlex();
 
     std::string path;

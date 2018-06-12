@@ -24,6 +24,7 @@ target_link_libraries(
 add_library(
     grammaticalAnalysier
     src/lib/grammaticalAnalysier.cpp
+    src/lib/grammaticalAnalysierMake.cpp
 )
 target_link_libraries(
     grammaticalAnalysier
