@@ -10,7 +10,7 @@
             },
             "includePath": [
                 "${workspaceFolder}",
-                "${workspaceFolder}/third/json/include",
+                "${workspaceFolder}/third/json/single_include",
                 "${workspaceFolder}/include",
                 "/usr/include"
             ],

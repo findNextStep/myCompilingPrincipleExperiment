@@ -1,9 +1,11 @@
 #include "grammaticalAnalysier.hpp"
-// #include <iostream>
+#include <iostream>
 #include <algorithm>
+#include <list>
+#include <stack>
 
-// using ::std::cout;
-// using ::std::endl;
+using ::std::cout;
+using ::std::endl;
 namespace theNext {
 
 template<>
@@ -80,16 +82,16 @@ grammaticalAnalysier &grammaticalAnalysier::makeDFA() {
     // }
     this->state_map.resize(1);
     this->set_to(this->end_rule, "", 0);
-    int i = 0;
-    for(auto path : this->state_map) {
-        // cout << i << endl;
-        for(auto role : path) {
-            // cout <<
-            //      "\t" << i << " --\"" << role.first << "\"--> " << role.second << endl;
-        }
-        // cout << endl;
-        ++i;
-    }
+    // int i = 0;
+    // for(auto path : this->state_map) {
+    //     cout << i << endl;
+    //     for(auto role : path) {
+    //         cout <<
+    //              "\t" << i << " --\"" << role.first << "\"--> " << role.second << endl;
+    //     }
+    //     cout << endl;
+    //     ++i;
+    // }
     return *this;
 }
 
@@ -140,9 +142,9 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                             } else {
                                 this->state_map[now][rule[0]] = this->state_map[it->second][rule[0]];
                                 // cout << it->second << endl;
-                                // cout <<
+                                cout <<
                                 //       "link : " <<
-                                //      now << " --\"" << rule[0] << "\"--> " << this->state_map[now][rule[0]] << endl;
+                                     now << " --\"" << rule[0] << "\"--> " << this->state_map[now][rule[0]] << endl;
                             }
 
                         }
@@ -154,9 +156,9 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                     now = state_map[now][path];
                 } else {
                     this->state_map[now][path] = this->state_map.size();
-                    // cout <<
+                    cout <<
                     //       "crea : " <<
-                    //      now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
+                         now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
 
                     now = this->state_map.size();
                     this->state_map.resize(this->state_map.size() + 1);
@@ -166,16 +168,16 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                     now = state_map[now][path];
                 } else {
                     this->state_map[now][path] = this->state_map.size();
-                    // cout <<
+                    cout <<
                     //       "crea : " <<
-                    //      now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
+                         now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
 
                     now = this->state_map.size();
                     this->state_map.resize(this->state_map.size() + 1);
                 }
             }
         }
-        this->add_end(now, rule);
+        this->add_end(now, name, rule);
     }
     this->query[std::make_pair(name, end)] = start;
     // cout << endl;
@@ -184,13 +186,50 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
     }
     return;
 }
-void grammaticalAnalysier::add_end(const int n, const rule_t rule) {
+void grammaticalAnalysier::add_end(const int n, const std::string name, const rule_t rule) {
+    auto end = std::make_pair(name, rule);
     if(in_a_end.find(n) == in_a_end.end()) {
-        this->in_a_end[n] = rule;
-    } else if(in_a_end[n] == rule) {
+        this->in_a_end[n] = end;
+    } else if(in_a_end[n] == end) {
         return;
     } else {
         exit(-1);
     }
 }
+
+gramaticalTree grammaticalAnalysier::analise(std::vector<token> token_list)const {
+    using nlohmann::json;
+    json js;
+    js["type"] = this->end_rule;
+    gramaticalTree ans(token::fromJson(js));
+    ::std::list<gramaticalTree> buffer;
+    int state = 0;
+
+    for(auto toke : token_list) {
+        if(this->state_map[state].end() != this->state_map[state].find(toke.type)) {
+            /* 如果当前结点存在下一步 */
+            state = this->state_map[state].at(toke.type);
+            buffer.push_back(toke);
+        } else if(this->in_a_end.end() != this->in_a_end.find(state)) {
+            token there;
+            there.type = this->in_a_end.find(state)->second.first;
+            gramaticalTree now(there);
+            std::stack<gramaticalTree> st;
+            /* 反向迭代检查表格 */
+            for(auto it = this->in_a_end.at(state).second.rbegin(); it != this->in_a_end.at(state).second.rend(); ++it) {
+                if(*it == buffer.rbegin()->my.type) {
+                    now.addSon(*buffer.rbegin());
+                    buffer.pop_back();
+                } else {
+                    exit(233);
+                }
+            }
+            buffer.push_back(now);
+        } else {
+            exit(234);
+        }
+    }
+    return gramaticalTree(token_list[0]);
+}
+
 }// namespace theNext

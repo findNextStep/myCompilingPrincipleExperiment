@@ -41,5 +41,6 @@ src/test/grammaticalAnalysierTest.cpp)
 
 target_link_libraries(
     grammaticalAnalysierTest
+    lexicalAnalysier
     grammaticalAnalysier
 )

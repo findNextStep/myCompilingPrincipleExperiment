@@ -1,5 +1,25 @@
-#include<grammaticalAnalysier.hpp>
+#include <grammaticalAnalysier.hpp>
+#include <threadLanguage/threadSetting.hpp>
+#include <fstream>
+#include <iostream>
+
 using namespace theNext;
+using namespace std;
+string readFile(string name) {
+    std::ifstream is(name, std::ifstream::binary);
+    if(is) {
+        is.seekg(0, is.end);
+        int length = is.tellg();
+        is.seekg(0, is.beg);
+        char *buffer = new char [length];
+        is.read(buffer, length);
+        is.close();
+        string ans = std::string(buffer, length);
+        delete[] buffer;
+        return ans;
+    }
+    return "";
+}
 int main() {
     grammaticalAnalysier ana;
     ana.addGramaticRule("ThreadSpec",
@@ -61,6 +81,12 @@ int main() {
     // ana.addGramaticRule("A",rule_t());
     // ana.setEndRule("A");
     ana.makeDFA();
+    cout << "??" << endl;
+    auto lex = theNext::threadSetting::getlex();
 
+    std::string path;
+    std::cin >> path;
+    auto content = readFile(path);
+    cout << ana.analise(lex.analysis(content)).toJson() << endl;
     return 0;
 }

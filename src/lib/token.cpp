@@ -3,7 +3,7 @@
 
 namespace theNext {
 
-::nlohmann::json token::toJson() {
+::nlohmann::json token::toJson() const{
     ::nlohmann::json ans;
     ans["type"] = this->type;
     ans["content"] = this->content;
