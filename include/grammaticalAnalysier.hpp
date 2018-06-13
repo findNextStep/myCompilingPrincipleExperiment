@@ -35,6 +35,9 @@ public:
     ~grammaticalAnalysier() {}
     template <typename T, typename...Args>
     grammaticalAnalysier &addGramaticRule(const ::std::string &rulename, T number1, Args... numbers) {
+        if(this->end_rule == "") {
+            setEndRule(rulename);
+        }
         std::vector<rule_t> total_rule(1);
         addGramaticRule(total_rule, number1, numbers...);
         add_rule(rulename, total_rule);
@@ -42,6 +45,9 @@ public:
     }
     template <typename T>
     grammaticalAnalysier &addGramaticRule(const ::std::string &rulename, T number1) {
+        if(this->end_rule == "") {
+            setEndRule(rulename);
+        }
         std::vector<rule_t> total_rule(1);
         addGramaticRule(total_rule, number1);
         add_rule(rulename, total_rule);

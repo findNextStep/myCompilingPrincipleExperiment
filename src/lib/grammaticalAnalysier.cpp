@@ -41,7 +41,11 @@ gramaticalTree grammaticalAnalysier::analise(const std::vector<token> token_list
                     } else {
                         new_node.addSon_back(*buffer.rbegin());
                         buffer.pop_back();
-                        next = buffer.rbegin()->my.type;
+                        if(buffer.size()) {
+                            next = buffer.rbegin()->my.type;
+                        } else {
+                            return false;
+                        }
                     }
                     return true;
                 }
@@ -51,6 +55,13 @@ gramaticalTree grammaticalAnalysier::analise(const std::vector<token> token_list
             buffer.push_back(new_node);
             state = 0;
             for(auto tree : buffer) {
+                cout << tree.my.type << "\t";
+            }
+            cout << endl;
+            for(auto tree : buffer) {
+                if(tree.my.type == this->end_rule) {
+                    return tree;
+                }
                 cout << tree.my.type << "\t" << state << endl;
                 state = state_map.at(state).at(tree.my.type);
             }

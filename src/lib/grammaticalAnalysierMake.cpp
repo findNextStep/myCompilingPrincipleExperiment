@@ -35,12 +35,28 @@ void grammaticalAnalysier::makeRule(std::vector<rule_t> &total_rule, repeat add_
     }
     name = "repeat_" + name;
     for(auto it = total_rule.begin(); it != total_rule.end(); ++it) {
-        it->push_back(name);
+        for(auto rule : add_rule) {
+            it->push_back(rule);
+        }
     }
-    this->addGramaticRule<rule_t>(name, (rule_t)add_rule);
-    auto repeat_rule = add_rule;
-    repeat_rule.push_back(name);
-    this->addGramaticRule<rule_t>(name, (rule_t)repeat_rule);
+    for(auto font_rule : total_rule) {
+        this->addGramaticRule(name, font_rule);
+    }
+    rule_t repeat;
+    repeat.push_back(name);
+    for(auto rule : add_rule) {
+        repeat.push_back(rule);
+    }
+    this->addGramaticRule(name, repeat);
+    total_rule.resize(0);
+    total_rule.push_back({name});
+    // for(auto it = total_rule.begin(); it != total_rule.end(); ++it) {
+    //     it->push_back(name);
+    // }
+    // this->addGramaticRule<rule_t>(name, (rule_t)add_rule);
+    // auto repeat_rule = add_rule;
+    // repeat_rule.push_back(name);
+    // this->addGramaticRule<rule_t>(name, (rule_t)repeat_rule);
     // total_rule.push_back(name);
 }
 
@@ -138,7 +154,6 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
     for(auto rule : this->all_rule[name]) {
         int now = start;
         for(int i = 0; i < rule.size(); ++i) {
-
             const auto path  = rule[i];
             if(!this->isToken(path)) {
                 std::string path_end = end;
@@ -152,18 +167,18 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                         // this->set_to(path, path_end, it->second);
                         if(rule.size()) {
                             if(state_map[now].find(rule[0]) != state_map[now].end()) {
-                                now =  state_map[now][rule[0]];
+                                // now =  state_map[now][rule[0]];
                             } else {
                                 this->state_map[now][rule[0]] = this->state_map[it->second][rule[0]];
-                                if(now == 154) {
-                                    cout << "???" << endl;
-                                }
                                 // cout << it->second << endl;
                                 cout <<
                                      //       "link : " <<
                                      now << " --\"" << rule[0] << "\"--> " << this->state_map[now][rule[0]] << endl;
-                            }
 
+                                if(now == 50 && rule[0] == "identifier" && this->state_map[now][rule[0]] == 50) {
+                                    cout << "???" << endl;
+                                }
+                            }
                         }
                     }
                 } else {
