@@ -36,7 +36,7 @@ lexicalAnalysier &lexicalAnalysier::defineKeyWords(const std::string &word, cons
     for(::std::string::iterator it = context.begin(); it != context.end(); ++it) {
         // 列数++
         ++colw;
-        if(*it == '\n' && last_char != '\r' || *it == '\r') {
+        if((*it == '\n' && last_char != '\r') || *it == '\r') {
             // 遇到回车行数++，列数归零
             ++line;
             colw = 0;
