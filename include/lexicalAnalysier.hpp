@@ -70,7 +70,7 @@ public:
      * @return this_t&
      */
     this_t &defineEndState(const ::std::string &nowState, const ::std::string &outState) {
-        this->end_state[nowState] = nowState;
+        this->end_state[nowState] = outState;
         return *this;
     }
     /**
