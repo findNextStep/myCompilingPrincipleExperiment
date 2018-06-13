@@ -59,6 +59,9 @@ int main() {
     ana.addGramaticRule("flowSourceSpec", rule_t({"identifier", ":", "flow", "source", "identifier"}),
                         option_and_repeat({"{", "association", "}"}),
                         rule_t({";"}));
+    ana.addGramaticRule("flowSinkSpec",
+                        rule_t({"identifier", ":", "flow", "source", "identifier"}),
+                        option_and_repeat({"association"}));
     ana.addGramaticRule("flowPathSpec", rule_t({"identifier", ":", "flow", "path", "identifier", "->", "identifier", ";"}));
     ana.addGramaticRule("association", optional({"identifier", "::"}),
                         rule_t({"identifier", "splitter"}),
@@ -68,13 +71,14 @@ int main() {
     ana.addGramaticRule("splitter", rule_t({"+=>"}));
     ana.addGramaticRule("splitter", rule_t({"=>"}));
     ana.addGramaticRule("reference",
-                        optional({"packageName", "::"}),
+                        optional({"packageName"}),
                         rule_t({"identifier"}));
 
     ana.addGramaticRule("packageName",
-                        repeat({"identifier", "::"}),
-                        rule_t({"identifier"}));
-    ana.setEndRule("ThreadSpec");
+                        rule_t({"identifier", "::"})
+                        // ,rule_t({"identifier"})
+                       );
+
 
     // ana.addGramaticRule("A", rule_t({"{", "A", "}"}));
     // ana.addGramaticRule("A",option_and_repeat({"a"}));
