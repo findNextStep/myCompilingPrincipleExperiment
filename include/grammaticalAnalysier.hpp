@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include "struct/gramaticalTree.hpp"
+#include "tool/matchingDFA.hpp"
 
 namespace theNext {
 typedef ::std::vector<std::string> rule_t;
@@ -53,7 +54,7 @@ public:
 
     grammaticalAnalysier &makeDFA();
 
-    gramaticalTree analise(std::vector<token> tokens) const;
+    gramaticalTree analise(const std::vector<token> tokens) const;
 
 protected:
     template <typename T, typename...Args>
@@ -74,23 +75,24 @@ protected:
     void add_rule(const ::std::string name, const std::vector<rule_t> &total_rule) {
         for(auto rule : total_rule) {
             add_rule(name, rule);
-            }
         }
-        virtual void add_rule(const ::std::string name, const rule_t &total_rule);
-        virtual void add_end(const int n, const std::string name, rule_t rule);
-        template<typename T>
-        void makeRule(std::vector<rule_t> &total_rule, T add_rule);
-        void set_to(std::string name, std::string end, int start);
-    private:
-        /**
-         * @brief
-         * [自动机标号<<转换token,期待结尾> ,跳转为结尾]
-         */
-        typedef ::std::vector<std::map<::std::string, int> > state_machine;
-        ::std::map<::std::pair<::std::string, ::std::string>, int> query;
-        std::map<std::string, std::vector<rule_t> >all_rule;
-        std::map<int, std::pair<std::string, rule_t> > in_a_end;
-        std::string end_rule;
-        state_machine state_map;
-    };
-    } // namespace theNext
+    }
+    virtual void add_rule(const ::std::string name, const rule_t &total_rule);
+    virtual void add_end(const int n, const std::string name, rule_t rule);
+    template<typename T>
+    void makeRule(std::vector<rule_t> &total_rule, T add_rule);
+    void set_to(std::string name, std::string end, int start);
+private:
+    /**
+     * @brief
+     * [自动机标号<<转换token,期待结尾> ,跳转为结尾]
+     */
+    typedef ::std::vector<std::map<::std::string, int> > state_machine;
+    ::std::map<::std::pair<::std::string, ::std::string>, int> query;
+    std::map<std::string, std::vector<rule_t> >all_rule;
+    // std::map<int, std::pair<std::string, rule_t> > in_a_end;
+    ::std::map<int, matchingDFA> in_a_end;
+    std::string end_rule;
+    state_machine state_map;
+};
+} // namespace theNext

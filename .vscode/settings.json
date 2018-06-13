@@ -2,8 +2,6 @@
     "files.associations": {
         "CMakeLists.txt": "cmake",
         "*.cmake": "makefile",
-        "xmonad-session-rc": "shellscript",
-        "*.hsc": "haskell",
         "array": "cpp",
         "atomic": "cpp",
         "*.tcc": "cpp",
@@ -46,6 +44,12 @@
         "typeinfo": "cpp",
         "utility": "cpp",
         "valarray": "cpp",
-        "slist": "cpp"
+        "slist": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp"
     }
 }

@@ -34,13 +34,13 @@ void grammaticalAnalysier::makeRule(std::vector<rule_t> &total_rule, repeat add_
         }
     }
     name = "repeat_" + name;
+    for(auto it = total_rule.begin(); it != total_rule.end(); ++it) {
+        it->push_back(name);
+    }
     this->addGramaticRule<rule_t>(name, (rule_t)add_rule);
     auto repeat_rule = add_rule;
     repeat_rule.push_back(name);
     this->addGramaticRule<rule_t>(name, (rule_t)repeat_rule);
-    for(auto it = total_rule.begin(); it != total_rule.end(); ++it) {
-        it->push_back(name);
-    }
     // total_rule.push_back(name);
 }
 
@@ -155,6 +155,9 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                                 now =  state_map[now][rule[0]];
                             } else {
                                 this->state_map[now][rule[0]] = this->state_map[it->second][rule[0]];
+                                if(now == 154) {
+                                    cout << "???" << endl;
+                                }
                                 // cout << it->second << endl;
                                 cout <<
                                      //       "link : " <<
@@ -170,6 +173,10 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                     now = state_map[now][path];
                 } else {
                     this->state_map[now][path] = this->state_map.size();
+
+                    if(now == 154) {
+                        cout << "???" << endl;
+                    }
                     cout <<
                          //       "crea : " <<
                          now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
@@ -182,6 +189,10 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
                     now = state_map[now][path];
                 } else {
                     this->state_map[now][path] = this->state_map.size();
+
+                    if(now == 154) {
+                        cout << "???" << endl;
+                    }
                     cout <<
                          //       "crea : " <<
                          now << " --\"" << path << "\"--> " << this->state_map[now][path] << endl;
@@ -201,13 +212,6 @@ void grammaticalAnalysier::set_to(std::string name, std::string end, int start) 
     return;
 }
 void grammaticalAnalysier::add_end(const int n, const std::string name, const rule_t rule) {
-    auto end = std::make_pair(name, rule);
-    if(in_a_end.find(n) == in_a_end.end()) {
-        this->in_a_end[n] = end;
-    } else if(in_a_end[n] == end) {
-        return;
-    } else if(in_a_end[n].first == end.first) {} else {
-        exit(-1);
-    }
+    this->in_a_end[n].add(rule, name);
 }
 }
