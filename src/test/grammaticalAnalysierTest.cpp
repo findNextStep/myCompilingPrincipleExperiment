@@ -70,7 +70,7 @@ void printTree(const ::nlohmann::json &js, vector<string> need_list, int my = 0)
                 }
             }
         }
-    }
+   }
 }
 
 int main() {
@@ -133,16 +133,11 @@ int main() {
                        );
 
 
-    // ana.addGramaticRule("A", rule_t({"{", "A", "}"}));
-    // ana.addGramaticRule("A",option_and_repeat({"a"}));
-    // ana.addGramaticRule("A",rule_t());
-    // ana.setEndRule("A");
     ana.makeDFA();
     auto lex = theNext::threadSetting::getlex();
 
     std::string path;
-    // std::cin >> path;
-    path = "/media/pxq/data/cuorse/complie/task/2task/语法分析课程实验要求/test/test1.txt";
+    std::cin >> path;
     auto content = readFile(path);
     cout << ana.analise(lex.analysis(content)).toJson() << endl;
     auto ans = ana.analise(lex.analysis(content));

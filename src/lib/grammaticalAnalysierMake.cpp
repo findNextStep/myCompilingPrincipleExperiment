@@ -88,6 +88,7 @@ void grammaticalAnalysier::add_rule(const ::std::string name, const rule_t &tota
 }
 
 grammaticalAnalysier &grammaticalAnalysier::makeDFA() {
+    this->DFAhas_make = true;
     this->remove_repeat();
     // for(auto rule : this->all_rule) {
     //     cout << rule.first << endl;

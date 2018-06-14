@@ -5,7 +5,10 @@
 
 namespace theNext {
 
-gramaticalTree grammaticalAnalysier::analise(const std::vector<token> token_list)const {
+gramaticalTree grammaticalAnalysier::analise(const std::vector<token> token_list) {
+    if(!this->DFAhas_make) {
+        this->makeDFA();
+    }
     using nlohmann::json;
     json js;
     js["type"] = this->end_rule;
