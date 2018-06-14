@@ -6,6 +6,12 @@
 
 using namespace theNext;
 using namespace std;
+/**
+ * @brief 文件读取函数
+ *
+ * @param name 文件名或者文件路径
+ * @return string 文件内容
+ */
 string readFile(string name) {
     std::ifstream is(name, std::ifstream::binary);
     if(is) {
@@ -26,6 +32,12 @@ string readFile(string name) {
 int last = 0;
 bool first = false;
 
+/**
+ * @brief 判断一个结点是否需要被显示
+ *
+ * @param js 结点
+ * @param need_list 需要显示的类型表
+ */
 bool needoutput(const ::nlohmann::json &js, vector<std::string> need_list) {
     if(js.find("son") != js.end()) {
         bool need = false;
@@ -45,6 +57,13 @@ bool needoutput(const ::nlohmann::json &js, vector<std::string> need_list) {
     }
 }
 
+/**
+ * @brief 按照mermaid的流程图格式绘制语法分析树
+ *
+ * @param js 语法分析树结点
+ * @param need_list 需要显示的类型
+ * @param my 当前结点编号
+ */
 void printTree(const ::nlohmann::json &js, vector<string> need_list, int my = 0) {
     if(js.find("son") != js.end()) {
         for(auto son : js["son"]) {
@@ -70,7 +89,7 @@ void printTree(const ::nlohmann::json &js, vector<string> need_list, int my = 0)
                 }
             }
         }
-   }
+    }
 }
 
 int main() {
@@ -129,11 +148,9 @@ int main() {
 
     ana.addGramaticRule("packageName",
                         rule_t({"identifier", "::"})
-                        // ,rule_t({"identifier"})
                        );
 
 
-    ana.makeDFA();
     auto lex = theNext::threadSetting::getlex();
 
     std::string path;
