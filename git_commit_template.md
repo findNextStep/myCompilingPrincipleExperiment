@@ -19,6 +19,8 @@
 
         - [cpp tlex] 针对词法分析程序的测试用例
 
+    - [cpp tool] 描述各种工具函数/工具类的修改
+    
     - [cpp lthr] 描述对于语言thread限制的修改
 
 - [makefile] 描述对`CMakeLists.txt`的修改

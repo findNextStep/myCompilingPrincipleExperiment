@@ -26,22 +26,24 @@ add_library(
     src/lib/grammaticalAnalysier.cpp
     src/lib/grammaticalAnalysierMake.cpp
 )
+
+add_library(
+    printtree
+    src/lib/treePrinter.cpp
+)
+
+link_libraries(
+    grammaticalAnalysier
+    lexicalAnalysier
+    printtree
+)
+
 target_link_libraries(
     grammaticalAnalysier
     token
 )
 
 add_executable(functionalTestForLexicalAnalysier src/test/functionalTestForLexicalAnalysier.cpp)
-target_link_libraries(
-    functionalTestForLexicalAnalysier
-    lexicalAnalysier
-)
 
 add_executable(grammaticalAnalysierTest
 src/test/grammaticalAnalysierTest.cpp)
-
-target_link_libraries(
-    grammaticalAnalysierTest
-    lexicalAnalysier
-    grammaticalAnalysier
-)
