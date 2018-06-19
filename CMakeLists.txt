@@ -47,3 +47,9 @@ add_executable(functionalTestForLexicalAnalysier src/test/functionalTestForLexic
 
 add_executable(grammaticalAnalysierTest
 src/test/grammaticalAnalysierTest.cpp)
+
+add_executable(task1
+src/test/task1.cpp)
+
+add_executable(task2
+src/test/task2.cpp)
