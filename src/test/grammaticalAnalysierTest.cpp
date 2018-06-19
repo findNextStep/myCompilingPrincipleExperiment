@@ -104,5 +104,6 @@ int main() {
     auto ans = ana.analise(lex.analysis(content));
     theNext::treePrinter printer({threadSetting::identifier, threadSetting::decimal});
     printer.setTree(ans.toJson());
+    cout << printer.toList() << endl;
     return 0;
 }
