@@ -6,6 +6,11 @@
 
 编译器需要c++14支持
 
+> git submodule update --init
+> mkdir build
+> cmake ..
+> make -j4
+
 ### windows
 
 > g++ --version
@@ -61,6 +66,10 @@
 
       简单的dfa匹配的实现
 
+    - treePrinter.hpp
+
+      语法树输出工具
+
   - lexicalAnalysier.hpp
 
     词法分析程序的声明
@@ -93,6 +102,10 @@
 
       token的实现
 
+    - treePrinter.cpp
+
+      语法树格式化输出实现
+
   - test
 
     测试程序
@@ -104,6 +117,14 @@
     - grammaticalAnalysierTest.cpp
       
       测试语法分析程序正确性的程序
+
+    - task1.cpp
+
+      实验一的结果
+
+    - task2.cpp
+     
+      实验二的结果
 
 - third
 
