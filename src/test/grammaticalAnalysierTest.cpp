@@ -29,6 +29,26 @@ string readFile(string name) {
     return "";
 }
 
+std::string mermaid(const ::nlohmann::json &js, int &i) {
+    int my = i;
+    std::stringstream ss;
+    ss << i << '[' << js.at("type") << ']' << endl;
+    std::string ans = ss.str();
+    if(js.find("son") != js.end()) {
+        for(auto son : js.at("son")) {
+            i++;
+            int sonnum = i;
+            ans += mermaid(son, i);
+            std::stringstream ss;
+            ss << my << " --> " << sonnum << endl;
+            ans += ss.str();
+        }
+    } else {
+        ss << i << "[\"" << js.at("type").get<std::string>() << "<br>" << js.at("content").get<std::string>() << "\"]" << endl;
+        ans = ss.str();
+    }
+    return ans;
+}
 
 int main() {
     auto lex = theNext::threadSetting::getlex();
@@ -37,10 +57,14 @@ int main() {
     std::string path;
     std::cin >> path;
     auto content = readFile(path);
-    cout << ana.analise(lex.analysis(content)).toJson().dump(2) << endl;
+    // cout << ana.analise(lex.analysis(content)).toJson().dump(2) << endl;
     auto ans = ana.analise(lex.analysis(content));
     theNext::treePrinter printer({threadSetting::identifier, threadSetting::decimal});
     printer.setTree(ans.toJson());
-    cout << printer.toList() << endl;
+    // cout << printer.toList() << endl;
+    int i = 0;
+    ::nlohmann::json js = ::nlohmann::json::parse(printer.toJson());
+    cout << js.dump(2) << endl;
+    cout << mermaid(js, i) << endl;
     return 0;
 }
